@@ -1,302 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quebec Sales Tax Calculator - UtilixyTools</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<title>Quebec Tax Calculator – GST/TPS and QST/TVQ</title>
-<meta name="description" content="Calculate Quebec sales tax with this free GST/TPS and QST/TVQ calculator.">
+  <style>
+    :root {
+      --bg-color: #061712;
+      --card-bg: rgba(14, 35, 27, 0.7);
+      --card-border: rgba(52, 211, 153, 0.15);
+      --accent-color: #10b981;
+      --accent-hover: #059669;
+      --text-main: #f0fdf4;
+      --text-muted: #86efac;
+      --text-sub: #9ca3af;
+      --input-bg: #0a2018;
+    }
 
-<link rel="icon" href="logo.png">
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-color);
+      background-image: radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
 
-<style>
-* { box-sizing: border-box; }
+    header {
+      display: flex; justify-content: space-between; align-items: center; padding: 20px 8%;
+      border-bottom: 1px solid var(--card-border); backdrop-filter: blur(12px); background: rgba(6, 23, 18, 0.8);
+    }
+    .logo { font-size: 22px; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .logo span { color: var(--accent-color); }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #022c22, #064e3b);
-  color: white;
-  padding: 20px;
-  min-height: 100vh;
-}
+    .container { max-width: 800px; margin: 50px auto; padding: 0 20px; }
+    .tool-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 32px; backdrop-filter: blur(10px);
+    }
 
-.container {
-  max-width: 520px;
-  margin: auto;
-}
+    .mode-toggle { display: flex; gap: 10px; background: var(--input-bg); padding: 6px; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 24px; }
+    .mode-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-sub); border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .mode-btn.active { background: var(--accent-color); color: #04120e; }
 
-.back {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 15px;
-}
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+    .input-group input { width: 100%; padding: 14px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-main); font-size: 18px; outline: none; }
+    .input-group input:focus { border-color: var(--accent-color); }
 
-h1 {
-  text-align: center;
-  margin-bottom: 10px;
-}
+    .results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+    .result-box { background: rgba(6, 23, 18, 0.5); padding: 18px; border-radius: 12px; border: 1px solid var(--card-border); }
+    .result-box label { font-size: 12px; color: var(--text-sub); display: block; }
+    .result-box .val { font-size: 22px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
+    .result-box.highlight { border-color: var(--accent-color); background: rgba(16, 185, 129, 0.08); }
+    .result-box.highlight .val { color: var(--accent-color); }
 
-.intro {
-  text-align: center;
-  color: #e5e7eb;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.card, .seo-box {
-  background: #f9fafb;
-  color: black;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  margin-bottom: 20px;
-}
-
-.mode-toggle {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.mode-toggle button {
-  flex: 1;
-  background: #e5e7eb;
-  color: black;
-}
-
-.mode-toggle .active {
-  background: #064e3b;
-  color: white;
-}
-
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 8px;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-input:focus {
-  outline: none;
-  border-color: #064e3b;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 8px;
-  border: none;
-  border-radius: 12px;
-  background: #064e3b;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #022c22;
-}
-
-.clear-btn {
-  background: #e5e7eb;
-  color: black;
-}
-
-.result {
-  margin-top: 15px;
-  padding: 15px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  line-height: 1.8;
-  font-weight: bold;
-}
-
-.disclaimer {
-  margin-top: 15px;
-  font-size: 12px;
-  color: #6b7280;
-  line-height: 1.5;
-}
-
-.seo-box h2 {
-  margin-top: 0;
-}
-
-.seo-box p, .seo-box li {
-  line-height: 1.6;
-}
-</style>
+    footer { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
+    </a>
+  </header>
 
-  <a href="index.html" class="back">← Back to menu</a>
-
-  <h1>Quebec Tax Calculator</h1>
-
-  <p class="intro">
-    Calculate Quebec GST/TPS and QST/TVQ instantly.
-  </p>
-
-  <div class="card">
-
-    <div class="mode-toggle">
-      <button id="beforeBtn" class="active" onclick="setMode('before')">
-        Before Tax
-      </button>
-      <button id="afterBtn" onclick="setMode('after')">
-        After Tax
-      </button>
+  <main class="container">
+    <div style="margin-bottom: 24px;">
+      <a href="index.html" style="color: var(--accent-color); text-decoration: none; font-size: 14px; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Back to Tools</a>
+      <h1 style="font-size: 32px; font-weight: 800; margin-top: 12px;">Quebec Tax Calculator</h1>
+      <p style="color: var(--text-sub);">Instantly calculate 5% GST and 9.975% QST taxes for Quebec.</p>
     </div>
 
-    <label id="label" for="price">Price before tax</label>
-    <input id="price" type="number" placeholder="Example: 100" oninput="calc()">
+    <div class="tool-card">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">Add Tax to Subtotal</button>
+        <button class="mode-btn" id="modeRemove" onclick="setMode('remove')">Extract Tax from Total</button>
+      </div>
 
-    <button onclick="calc()">Calculate</button>
-    <button class="clear-btn" onclick="clearTax()">Clear</button>
+      <div class="input-group">
+        <label id="inputLabel">Subtotal Amount ($)</label>
+        <input type="number" id="amountInput" placeholder="0.00" step="0.01" oninput="calculateTax()">
+      </div>
 
-    <div class="result" id="result">
-      GST/TPS: $0.00<br>
-      QST/TVQ: $0.00<br>
-      Total Tax: $0.00<br>
-      Total: $0.00
+      <div class="results-grid">
+        <div class="result-box">
+          <label>GST / TPS (5.000%)</label>
+          <div class="val" id="gstVal">$0.00</div>
+        </div>
+        <div class="result-box">
+          <label>QST / TVQ (9.975%)</label>
+          <div class="val" id="qstVal">$0.00</div>
+        </div>
+        <div class="result-box">
+          <label>Combined Tax (14.975%)</label>
+          <div class="val" id="totalTaxVal">$0.00</div>
+        </div>
+        <div class="result-box highlight">
+          <label id="totalLabel">Grand Total</label>
+          <div class="val" id="grandTotalVal">$0.00</div>
+        </div>
+      </div>
     </div>
+  </main>
 
-    <div class="disclaimer">
-      This calculator is for informational purposes only and does not constitute financial or tax advice.
-      Please consult a professional or Revenu Québec for official information.
-    </div>
+  <footer>
+    <p>&copy; 2026 UtilixyTools. All rights reserved.</p>
+  </footer>
 
-  </div>
+  <script>
+    let mode = 'add';
 
-  <div class="seo-box">
-    <h2>What is the Quebec Tax Calculator?</h2>
-    <p>
-      This free Quebec tax calculator helps you calculate GST/TPS and QST/TVQ on any price.
-      You can calculate the total after tax or reverse-calculate the price before tax.
-    </p>
+    function setMode(newMode) {
+      mode = newMode;
+      document.getElementById('modeAdd').classList.toggle('active', mode === 'add');
+      document.getElementById('modeRemove').classList.toggle('active', mode === 'remove');
+      document.getElementById('inputLabel').textContent = mode === 'add' ? 'Subtotal Amount ($)' : 'Total Price (Taxes Included) ($)';
+      document.getElementById('totalLabel').textContent = mode === 'add' ? 'Grand Total' : 'Net Subtotal (Before Tax)';
+      calculateTax();
+    }
 
-    <h2>Quebec sales tax rates</h2>
-    <p>
-      In Quebec, GST/TPS is calculated at 5% and QST/TVQ is calculated at 9.975%.
-      Together, they add up to 14.975%.
-    </p>
+    function calculateTax() {
+      const input = parseFloat(document.getElementById('amountInput').value) || 0;
+      let gst = 0, qst = 0, totalTax = 0, finalVal = 0;
 
-    <h2>How to use this calculator</h2>
-    <ul>
-      <li>Select “Before Tax” if you want to add tax to a price.</li>
-      <li>Select “After Tax” if you want to find the price before tax.</li>
-      <li>Enter the amount and the result will update instantly.</li>
-    </ul>
-  </div>
+      if (mode === 'add') {
+        gst = input * 0.05;
+        qst = input * 0.09975;
+        totalTax = gst + qst;
+        finalVal = input + totalTax;
+      } else {
+        const subtotal = input / 1.14975;
+        gst = subtotal * 0.05;
+        qst = subtotal * 0.09975;
+        totalTax = gst + qst;
+        finalVal = subtotal;
+      }
 
-</div>
-
-<script>
-let mode = "before";
-
-function setMode(newMode) {
-  mode = newMode;
-
-  document.getElementById("beforeBtn").classList.remove("active");
-  document.getElementById("afterBtn").classList.remove("active");
-
-  if (mode === "before") {
-    document.getElementById("beforeBtn").classList.add("active");
-    document.getElementById("label").innerText = "Price before tax";
-  } else {
-    document.getElementById("afterBtn").classList.add("active");
-    document.getElementById("label").innerText = "Price after tax";
-  }
-
-  calc();
-}
-
-function format(num) {
-  return "$" + num.toFixed(2);
-}
-
-function calc() {
-  let input = Number(document.getElementById("price").value || 0);
-
-  let base = 0;
-  let gst = 0;
-  let qst = 0;
-  let total = 0;
-
-  if (mode === "before") {
-    base = input;
-    gst = base * 0.05;
-    qst = base * 0.09975;
-    total = base + gst + qst;
-  } else {
-    total = input;
-    base = total / 1.14975;
-    gst = base * 0.05;
-    qst = base * 0.09975;
-  }
-
-  let totalTax = gst + qst;
-
-  let resultHTML = "";
-
-  if (mode === "after") {
-    resultHTML += "Price before tax: " + format(base) + "<br>";
-  }
-
-  resultHTML +=
-    "GST/TPS: " + format(gst) + "<br>" +
-    "QST/TVQ: " + format(qst) + "<br>" +
-    "Total Tax: " + format(totalTax) + "<br>" +
-    "Total: " + format(total);
-
-  document.getElementById("result").innerHTML = resultHTML;
-
-  localStorage.setItem("taxPrice", document.getElementById("price").value);
-  localStorage.setItem("taxMode", mode);
-}
-
-function clearTax() {
-  localStorage.removeItem("taxPrice");
-  localStorage.removeItem("taxMode");
-
-  document.getElementById("price").value = "";
-
-  document.getElementById("result").innerHTML =
-    "GST/TPS: $0.00<br>" +
-    "QST/TVQ: $0.00<br>" +
-    "Total Tax: $0.00<br>" +
-    "Total: $0.00";
-}
-
-window.onload = function() {
-  let savedPrice = localStorage.getItem("taxPrice");
-  let savedMode = localStorage.getItem("taxMode");
-
-  if (savedMode) {
-    setMode(savedMode);
-  }
-
-  if (savedPrice) {
-    document.getElementById("price").value = savedPrice;
-    calc();
-  }
-}
-</script>
-
+      document.getElementById('gstVal').textContent = '$' + gst.toFixed(2);
+      document.getElementById('qstVal').textContent = '$' + qst.toFixed(2);
+      document.getElementById('totalTaxVal').textContent = '$' + totalTax.toFixed(2);
+      document.getElementById('grandTotalVal').textContent = '$' + finalVal.toFixed(2);
+    }
+  </script>
 </body>
 </html>
