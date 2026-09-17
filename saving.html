@@ -1,221 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Savings Goal Calculator - UtilixyTools</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<title>Savings Goal Calculator – Free Monthly Savings Planner</title>
-<meta name="description" content="Use this free savings goal calculator to see how much money you need to save and how long it will take to reach your goal.">
+  <style>
+    :root {
+      --bg-color: #061712;
+      --card-bg: rgba(14, 35, 27, 0.7);
+      --card-border: rgba(52, 211, 153, 0.15);
+      --accent-color: #10b981;
+      --accent-hover: #059669;
+      --text-main: #f0fdf4;
+      --text-muted: #86efac;
+      --text-sub: #9ca3af;
+      --input-bg: #0a2018;
+    }
 
-<link rel="icon" href="logo.png">
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
 
-<style>
-* { box-sizing: border-box; }
+    header {
+      display: flex; justify-content: space-between; align-items: center; padding: 20px 8%;
+      border-bottom: 1px solid var(--card-border); backdrop-filter: blur(12px); background: rgba(6, 23, 18, 0.8);
+    }
+    .logo { font-size: 22px; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .logo span { color: var(--accent-color); }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #022c22, #064e3b);
-  color: white;
-  padding: 20px;
-  min-height: 100vh;
-}
+    .container { max-width: 900px; margin: 50px auto; padding: 0 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
-.container {
-  max-width: 520px;
-  margin: auto;
-}
+    .tool-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; backdrop-filter: blur(10px);
+    }
 
-.back {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 15px;
-}
+    .input-group { margin-bottom: 18px; }
+    .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+    .input-group input, .input-group select {
+      width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-main); outline: none; font-size: 15px;
+    }
+    .input-group input:focus, .input-group select:focus { border-color: var(--accent-color); }
 
-h1 {
-  text-align: center;
-  margin-bottom: 10px;
-}
+    .results-box {
+      background: rgba(6, 23, 18, 0.5); padding: 20px; border-radius: 14px; border: 1px solid var(--card-border); margin-bottom: 16px;
+    }
+    .results-box label { font-size: 12px; color: var(--text-sub); display: block; }
+    .results-box .val { font-size: 26px; font-weight: 800; color: var(--accent-color); margin-top: 4px; }
 
-.intro {
-  text-align: center;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  color: #e5e7eb;
-}
+    .stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--card-border); font-size: 14px; }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-row span { color: var(--text-sub); }
+    .stat-row strong { color: var(--text-main); }
 
-.card, .seo-box {
-  background: #f9fafb;
-  color: black;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  margin-bottom: 20px;
-}
+    .progress-bar-bg { background: var(--input-bg); height: 10px; border-radius: 5px; overflow: hidden; margin: 16px 0; border: 1px solid var(--card-border); }
+    .progress-bar-fill { background: var(--accent-color); height: 100%; width: 0%; transition: width 0.3s; }
 
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 8px;
-  border: none;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.calc-btn {
-  background: #064e3b;
-  color: white;
-}
-
-.clear-btn {
-  background: #e5e7eb;
-  color: black;
-}
-
-.result {
-  margin-top: 15px;
-  padding: 15px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  font-weight: bold;
-  line-height: 1.7;
-}
-
-.seo-box h2 {
-  margin-top: 0;
-}
-
-.seo-box p, .seo-box li {
-  line-height: 1.6;
-}
-</style>
+    footer { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
+    </a>
+  </header>
 
-<a href="index.html" class="back">← Back to menu</a>
+  <main class="container">
+    <div style="margin-bottom: 24px;">
+      <a href="index.html" style="color: var(--accent-color); text-decoration: none; font-size: 14px; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Back to Tools</a>
+      <h1 style="font-size: 32px; font-weight: 800; margin-top: 12px;">Savings Goal Calculator</h1>
+      <p style="color: var(--text-sub);">Calculate monthly savings requirements and compound growth to hit your target date.</p>
+    </div>
 
-<h1>Savings Goal Calculator</h1>
+    <div class="grid">
+      <!-- Inputs Panel -->
+      <div class="tool-card">
+        <h3 style="margin-bottom: 20px;">Goal Parameters</h3>
 
-<p class="intro">
-  Calculate how much you still need to save and how long it will take to reach your goal.
-</p>
+        <div class="input-group">
+          <label>Target Goal Amount ($)</label>
+          <input type="number" id="targetAmount" value="10000" oninput="calculateSavings()">
+        </div>
 
-<div class="card">
+        <div class="input-group">
+          <label>Starting Balance ($)</label>
+          <input type="number" id="startingBalance" value="1000" oninput="calculateSavings()">
+        </div>
 
-<input id="goal" type="number" placeholder="Savings goal amount">
-<input id="saved" type="number" placeholder="Amount already saved">
-<input id="monthly" type="number" placeholder="Amount you can save per month">
+        <div class="input-group">
+          <label>Timeframe (Months)</label>
+          <input type="number" id="months" value="12" min="1" oninput="calculateSavings()">
+        </div>
 
-<button class="calc-btn" onclick="calc()">Calculate</button>
-<button class="clear-btn" onclick="clearData()">Clear</button>
+        <div class="input-group">
+          <label>Expected Annual Interest Rate (%)</label>
+          <input type="number" id="interestRate" value="5" step="0.1" oninput="calculateSavings()">
+        </div>
+      </div>
 
-<div class="result" id="result">
-Remaining: $0.00<br>
-Time needed: 0 months
-</div>
+      <!-- Projection Output Panel -->
+      <div class="tool-card">
+        <h3>Savings Projection</h3>
 
-</div>
+        <div class="results-box" style="margin-top: 16px;">
+          <label>Required Monthly Contribution</label>
+          <div class="val" id="monthlyVal">$0.00</div>
+        </div>
 
-<div class="seo-box">
-  <h2>What is a savings goal calculator?</h2>
-  <p>
-    A savings goal calculator helps you estimate how long it will take to reach a money goal. Enter your target amount, how much you already saved, and how much you can save each month.
-  </p>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
 
-  <h2>Who can use this savings planner?</h2>
-  <p>
-    This tool is useful for students, workers, freelancers, and anyone planning to save money for rent, travel, emergency funds, purchases, or personal goals.
-  </p>
+        <div style="margin-top: 20px;">
+          <div class="stat-row">
+            <span>Target Goal:</span>
+            <strong id="statTarget">$0.00</strong>
+          </div>
+          <div class="stat-row">
+            <span>Initial Deposit:</span>
+            <strong id="statStarting">$0.00</strong>
+          </div>
+          <div class="stat-row">
+            <span>Total Contributions:</span>
+            <strong id="statContributions">$0.00</strong>
+          </div>
+          <div class="stat-row">
+            <span>Estimated Interest Earned:</span>
+            <strong id="statInterest" style="color: var(--accent-color);">$0.00</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
-  <h2>How to use this calculator</h2>
-  <ul>
-    <li>Enter your total savings goal.</li>
-    <li>Enter the amount you already saved.</li>
-    <li>Enter how much you can save per month.</li>
-    <li>Click calculate to see the remaining amount and estimated time needed.</li>
-  </ul>
-</div>
+  <footer>
+    <p>&copy; 2026 UtilixyTools. All rights reserved.</p>
+  </footer>
 
-</div>
+  <script>
+    function calculateSavings() {
+      const target = parseFloat(document.getElementById('targetAmount').value) || 0;
+      const starting = parseFloat(document.getElementById('startingBalance').value) || 0;
+      const months = parseInt(document.getElementById('months').value) || 1;
+      const annualRate = (parseFloat(document.getElementById('interestRate').value) || 0) / 100;
+      
+      const r = annualRate / 12; // Monthly rate
 
-<script>
-function calc() {
-  let goal = Number(document.getElementById("goal").value || 0);
-  let saved = Number(document.getElementById("saved").value || 0);
-  let monthly = Number(document.getElementById("monthly").value || 0);
+      let requiredMonthly = 0;
+      let totalInterest = 0;
 
-  let remaining = goal - saved;
+      if (r > 0) {
+        // Compound interest formula for required monthly payment
+        const futureValueOfStarting = starting * Math.pow(1 + r, months);
+        const remainingGoal = target - futureValueOfStarting;
 
-  if (remaining < 0) remaining = 0;
+        if (remainingGoal > 0) {
+          requiredMonthly = remainingGoal * (r / (Math.pow(1 + r, months) - 1));
+        } else {
+          requiredMonthly = 0;
+        }
+      } else {
+        const remainingGoal = target - starting;
+        requiredMonthly = remainingGoal > 0 ? remainingGoal / months : 0;
+      }
 
-  let months = 0;
+      const totalContributions = starting + (requiredMonthly * months);
+      totalInterest = Math.max(0, target - totalContributions);
 
-  if (monthly > 0) {
-    months = Math.ceil(remaining / monthly);
-  }
+      const progressPct = target > 0 ? Math.min((starting / target) * 100, 100) : 0;
 
-  let years = Math.floor(months / 12);
-  let extraMonths = months % 12;
+      document.getElementById('monthlyVal').textContent = '$' + requiredMonthly.toFixed(2);
+      document.getElementById('progressFill').style.width = progressPct + '%';
+      
+      document.getElementById('statTarget').textContent = '$' + target.toFixed(2);
+      document.getElementById('statStarting').textContent = '$' + starting.toFixed(2);
+      document.getElementById('statContributions').textContent = '$' + (requiredMonthly * months).toFixed(2);
+      document.getElementById('statInterest').textContent = '$' + totalInterest.toFixed(2);
+    }
 
-  let timeText = "";
-
-  if (months === 0) {
-    timeText = "Goal already reached";
-  } else if (years > 0) {
-    timeText = years + " year(s) and " + extraMonths + " month(s)";
-  } else {
-    timeText = months + " month(s)";
-  }
-
-  document.getElementById("result").innerHTML =
-    "Remaining: $" + remaining.toFixed(2) + "<br>" +
-    "Time needed: " + timeText;
-
-  localStorage.setItem("savingGoalData", JSON.stringify({
-    goal: goal,
-    saved: saved,
-    monthly: monthly
-  }));
-}
-
-function clearData() {
-  localStorage.removeItem("savingGoalData");
-
-  document.getElementById("goal").value = "";
-  document.getElementById("saved").value = "";
-  document.getElementById("monthly").value = "";
-
-  document.getElementById("result").innerHTML =
-    "Remaining: $0.00<br>" +
-    "Time needed: 0 months";
-}
-
-window.onload = function() {
-  let data = JSON.parse(localStorage.getItem("savingGoalData"));
-
-  if (data) {
-    document.getElementById("goal").value = data.goal || "";
-    document.getElementById("saved").value = data.saved || "";
-    document.getElementById("monthly").value = data.monthly || "";
-    calc();
-  }
-}
-</script>
-
+    calculateSavings();
+  </script>
 </body>
 </html>
