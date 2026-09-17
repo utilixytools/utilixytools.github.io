@@ -47,7 +47,6 @@
       line-height: 1.6;
     }
 
-    /* Navigation Header */
     header {
       display: flex;
       justify-content: space-between;
@@ -122,7 +121,6 @@
       border-color: rgba(239, 68, 68, 0.3);
     }
 
-    /* KPI Summary Row */
     .summary-header {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -156,7 +154,6 @@
     .kpi-value.negative { color: var(--danger-color); }
     .kpi-value.positive { color: var(--accent-color); }
 
-    /* Top Grid: Income + Doughnut Chart */
     .top-grid {
       display: grid;
       grid-template-columns: 1fr 240px;
@@ -214,7 +211,6 @@
       margin: 0 auto;
     }
 
-    /* Ratio Segment Bar */
     .bar-container {
       height: 10px;
       width: 100%;
@@ -235,7 +231,6 @@
     .bar-wants { background-color: var(--wants-color); }
     .bar-savings { background-color: var(--savings-color); }
 
-    /* Category Accordion Header */
     .category-header {
       display: flex;
       align-items: center;
@@ -301,7 +296,6 @@
       transform: rotate(-180deg);
     }
 
-    /* Category Input Grid */
     .category-content {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -392,7 +386,6 @@
 </head>
 <body>
 
-  <!-- Navigation Bar -->
   <header>
     <a href="index.html" class="logo">
       <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
@@ -412,7 +405,6 @@
         <span class="status-badge" id="budgetStatus"><i class="fa-solid fa-circle-check"></i> Balanced</span>
       </div>
 
-      <!-- KPI Summaries -->
       <div class="summary-header">
         <div class="kpi-card">
           <div class="kpi-label"><i class="fa-solid fa-receipt"></i> Total Expenses</div>
@@ -428,7 +420,6 @@
         </div>
       </div>
 
-      <!-- Income Input & Doughnut Chart -->
       <div class="top-grid">
         <div class="income-group">
           <div class="kpi-label"><i class="fa-solid fa-money-bill-wave"></i> Monthly Net Income (After Taxes)</div>
@@ -442,14 +433,12 @@
         </div>
       </div>
 
-      <!-- Category Breakdown Bar -->
       <div class="bar-container">
         <div class="bar-segment bar-needs" id="barNeeds" style="width: 50%;"></div>
         <div class="bar-segment bar-wants" id="barWants" style="width: 30%;"></div>
         <div class="bar-segment bar-savings" id="barSavings" style="width: 20%;"></div>
       </div>
 
-      <!-- Category 1: Needs -->
       <div class="category-header" onclick="toggleSection('needsContent', 'needsArrow')">
         <div class="category-title">
           <span class="dot dot-needs"></span>
@@ -497,7 +486,6 @@
         </div>
       </div>
 
-      <!-- Category 2: Wants -->
       <div class="category-header" onclick="toggleSection('wantsContent', 'wantsArrow')">
         <div class="category-title">
           <span class="dot dot-wants"></span>
@@ -534,7 +522,6 @@
         </div>
       </div>
 
-      <!-- Category 3: Savings -->
       <div class="category-header" onclick="toggleSection('savingsContent', 'savingsArrow')">
         <div class="category-title">
           <span class="dot dot-savings"></span>
@@ -567,119 +554,117 @@
   </footer>
 
   <script>
-    // Initialize Doughnut Chart
-    const ctx = document.getElementById('budgetChart').getContext('2d');
-    const budgetChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Needs', 'Wants', 'Savings'],
-        datasets: [{
-          data: [1800, 400, 500],
-          backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6'],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        cutout: '70%'
-      }
-    });
-
-    function formatCurrency(val) {
-      const isNegative = val < 0;
-      const absVal = Math.abs(val).toLocaleString('en-US');
-      return isNegative ? `-$${absVal}` : `$${absVal}`;
-    }
-
-    function calculateCategoryTotal(containerId) {
-      const sliders = document.querySelectorAll(`#${containerId} .expense-slider`);
-      let total = 0;
-      sliders.forEach(slider => { total += parseFloat(slider.value) || 0; });
-      return total;
-    }
-
-    function calculatePlanner() {
-      const netIncome = parseFloat(document.getElementById('netIncome').value) || 0;
-
-      const needsTotal = calculateCategoryTotal('needsContent');
-      const wantsTotal = calculateCategoryTotal('wantsContent');
-      const savingsCatTotal = calculateCategoryTotal('savingsContent');
-
-      const grandTotal = needsTotal + wantsTotal + savingsCatTotal;
-      const surplus = netIncome - grandTotal;
-      const rate = netIncome > 0 ? Math.round(((savingsCatTotal + Math.max(0, surplus)) / netIncome) * 100) : 0;
-
-      // Update KPI Cards
-      document.getElementById('totalExpenses').textContent = formatCurrency(grandTotal);
-      
-      const surplusEl = document.getElementById('savingsSurplus');
-      surplusEl.textContent = formatCurrency(surplus);
-      surplusEl.className = `kpi-value ${surplus < 0 ? 'negative' : 'positive'}`;
-
-      const statusEl = document.getElementById('budgetStatus');
-      if (surplus < 0) {
-        statusEl.className = 'status-badge negative';
-        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Over Budget`;
-      } else {
-        statusEl.className = 'status-badge';
-        statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Balanced`;
-      }
-
-      document.getElementById('savingsRate').textContent = `${rate}%`;
-
-      // Update Category Totals
-      document.getElementById('needsTotal').textContent = formatCurrency(needsTotal);
-      document.getElementById('wantsTotal').textContent = formatCurrency(wantsTotal);
-      document.getElementById('savingsCategoryTotal').textContent = formatCurrency(savingsCatTotal);
-
-      // Percentages for Progress Bar
-      const totalAllocated = grandTotal || 1;
-      const needsPct = Math.round((needsTotal / totalAllocated) * 100);
-      const wantsPct = Math.round((wantsTotal / totalAllocated) * 100);
-      const savingsPct = 100 - needsPct - wantsPct;
-
-      document.getElementById('needsPercent').textContent = `${needsPct}%`;
-      document.getElementById('wantsPercent').textContent = `${wantsPct}%`;
-      document.getElementById('savingsPercent').textContent = `${Math.max(0, savingsPct)}%`;
-
-      document.getElementById('barNeeds').style.width = `${needsPct}%`;
-      document.getElementById('barWants').style.width = `${wantsPct}%`;
-      document.getElementById('barSavings').style.width = `${Math.max(0, savingsPct)}%`;
-
-      // Update Chart Data
-      budgetChart.data.datasets[0].data = [needsTotal, wantsTotal, savingsCatTotal];
-      budgetChart.update();
-    }
-
-    // Synchronize Range Sliders & Numeric Inputs
-    document.querySelectorAll('.slider-item').forEach(item => {
-      const slider = item.querySelector('.expense-slider');
-      const box = item.querySelector('.expense-input');
-
-      slider.addEventListener('input', (e) => {
-        box.value = e.target.value;
-        calculatePlanner();
-      });
-
-      box.addEventListener('input', (e) => {
-        slider.value = e.target.value || 0;
-        calculatePlanner();
-      });
-    });
-
-    document.getElementById('netIncome').addEventListener('input', calculatePlanner);
-
+    // Accordion toggle declared in global scope
     function toggleSection(contentId, arrowId) {
       const content = document.getElementById(contentId);
       const arrow = document.getElementById(arrowId);
-
-      content.classList.toggle('hidden');
-      arrow.classList.toggle('collapsed');
+      if (content && arrow) {
+        content.classList.toggle('hidden');
+        arrow.classList.toggle('collapsed');
+      }
     }
 
-    calculatePlanner();
+    document.addEventListener('DOMContentLoaded', () => {
+      const ctx = document.getElementById('budgetChart').getContext('2d');
+      const budgetChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Needs', 'Wants', 'Savings'],
+          datasets: [{
+            data: [1800, 400, 500],
+            backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          cutout: '70%'
+        }
+      });
+
+      function formatCurrency(val) {
+        const isNegative = val < 0;
+        const absVal = Math.abs(val).toLocaleString('en-US');
+        return isNegative ? `-$${absVal}` : `$${absVal}`;
+      }
+
+      function calculateCategoryTotal(containerId) {
+        const sliders = document.querySelectorAll(`#${containerId} .expense-slider`);
+        let total = 0;
+        sliders.forEach(slider => { total += parseFloat(slider.value) || 0; });
+        return total;
+      }
+
+      function calculatePlanner() {
+        const netIncome = parseFloat(document.getElementById('netIncome').value) || 0;
+
+        const needsTotal = calculateCategoryTotal('needsContent');
+        const wantsTotal = calculateCategoryTotal('wantsContent');
+        const savingsCatTotal = calculateCategoryTotal('savingsContent');
+
+        const grandTotal = needsTotal + wantsTotal + savingsCatTotal;
+        const surplus = netIncome - grandTotal;
+        const rate = netIncome > 0 ? Math.round(((savingsCatTotal + Math.max(0, surplus)) / netIncome) * 100) : 0;
+
+        document.getElementById('totalExpenses').textContent = formatCurrency(grandTotal);
+        
+        const surplusEl = document.getElementById('savingsSurplus');
+        surplusEl.textContent = formatCurrency(surplus);
+        surplusEl.className = `kpi-value ${surplus < 0 ? 'negative' : 'positive'}`;
+
+        const statusEl = document.getElementById('budgetStatus');
+        if (surplus < 0) {
+          statusEl.className = 'status-badge negative';
+          statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Over Budget`;
+        } else {
+          statusEl.className = 'status-badge';
+          statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Balanced`;
+        }
+
+        document.getElementById('savingsRate').textContent = `${rate}%`;
+
+        document.getElementById('needsTotal').textContent = formatCurrency(needsTotal);
+        document.getElementById('wantsTotal').textContent = formatCurrency(wantsTotal);
+        document.getElementById('savingsCategoryTotal').textContent = formatCurrency(savingsCatTotal);
+
+        const totalAllocated = grandTotal || 1;
+        const needsPct = Math.round((needsTotal / totalAllocated) * 100);
+        const wantsPct = Math.round((wantsTotal / totalAllocated) * 100);
+        const savingsPct = 100 - needsPct - wantsPct;
+
+        document.getElementById('needsPercent').textContent = `${needsPct}%`;
+        document.getElementById('wantsPercent').textContent = `${wantsPct}%`;
+        document.getElementById('savingsPercent').textContent = `${Math.max(0, savingsPct)}%`;
+
+        document.getElementById('barNeeds').style.width = `${needsPct}%`;
+        document.getElementById('barWants').style.width = `${wantsPct}%`;
+        document.getElementById('barSavings').style.width = `${Math.max(0, savingsPct)}%`;
+
+        budgetChart.data.datasets[0].data = [needsTotal, wantsTotal, savingsCatTotal];
+        budgetChart.update();
+      }
+
+      document.querySelectorAll('.slider-item').forEach(item => {
+        const slider = item.querySelector('.expense-slider');
+        const box = item.querySelector('.expense-input');
+
+        slider.addEventListener('input', (e) => {
+          box.value = e.target.value;
+          calculatePlanner();
+        });
+
+        box.addEventListener('input', (e) => {
+          slider.value = e.target.value || 0;
+          calculatePlanner();
+        });
+      });
+
+      document.getElementById('netIncome').addEventListener('input', calculatePlanner);
+
+      calculatePlanner();
+    });
   </script>
 </body>
 </html>
