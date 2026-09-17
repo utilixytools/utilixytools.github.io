@@ -1,670 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BudgetFlow - UtilixyTools</title>
-  
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Google Fonts & FontAwesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
-    :root {
-      --bg-color: #061712;
-      --card-bg: rgba(14, 35, 27, 0.7);
-      --card-border: rgba(52, 211, 153, 0.15);
-      --accent-color: #10b981;
-      --accent-hover: #059669;
-      --text-main: #f0fdf4;
-      --text-muted: #86efac;
-      --text-sub: #9ca3af;
-      --input-bg: #0a2018;
-      
-      --needs-color: #3b82f6;
-      --wants-color: #10b981;
-      --savings-color: #8b5cf6;
-      --danger-color: #ef4444;
-      --accent-glow: rgba(16, 185, 129, 0.15);
-    }
-
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      background-image: 
-        radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
-        radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
-      color: var(--text-main);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 8%;
-      border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(6, 23, 18, 0.8);
-    }
-
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-main);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo span {
-      color: var(--accent-color);
-    }
-
-    .container {
-      max-width: 900px;
+    .budget-card {
+      max-width: 650px;
       margin: 40px auto;
-      padding: 0 20px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
-
-    .planner-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 36px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    .form-group {
+      margin-bottom: 20px;
     }
-
-    .header-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-    }
-
-    .header-title h1 {
-      font-size: 26px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .status-badge {
-      font-size: 12px;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: 600;
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-color);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-
-    .status-badge.negative {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--danger-color);
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-
-    .summary-header {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .kpi-card {
-      background: rgba(6, 23, 18, 0.6);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: left;
-    }
-
-    .kpi-label {
-      font-size: 13px;
-      color: var(--text-sub);
+    .form-group label {
+      display: block;
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .kpi-value {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .kpi-value.negative { color: var(--danger-color); }
-    .kpi-value.positive { color: var(--accent-color); }
-
-    .top-grid {
-      display: grid;
-      grid-template-columns: 1fr 240px;
-      gap: 24px;
-      align-items: center;
-      margin-bottom: 32px;
-      background: rgba(6, 23, 18, 0.4);
-      padding: 20px;
-      border-radius: 16px;
-      border: 1px solid var(--card-border);
-    }
-
-    .income-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .income-input-box {
-      background: var(--input-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      font-size: 20px;
       font-weight: 600;
     }
-
-    .income-input-box:focus-within {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .income-input-box span {
-      margin-right: 8px;
-      color: var(--text-sub);
-    }
-
-    .income-input-box input {
-      border: none;
-      background: transparent;
-      font-size: 20px;
-      font-weight: 600;
+    .form-group input[type="number"] {
       width: 100%;
-      outline: none;
-      color: var(--text-main);
-    }
-
-    .chart-container {
-      position: relative;
-      width: 100%;
-      max-width: 200px;
-      height: 140px;
-      margin: 0 auto;
-    }
-
-    .bar-container {
-      height: 10px;
-      width: 100%;
-      background-color: var(--input-bg);
+      padding: 12px;
+      border: 1px solid #ccc;
       border-radius: 6px;
-      display: flex;
-      overflow: hidden;
-      margin-bottom: 32px;
-      border: 1px solid var(--card-border);
-    }
-
-    .bar-segment {
-      height: 100%;
-      transition: width 0.4s ease;
-    }
-
-    .bar-needs { background-color: var(--needs-color); }
-    .bar-wants { background-color: var(--wants-color); }
-    .bar-savings { background-color: var(--savings-color); }
-
-    .category-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px;
-      background: rgba(6, 23, 18, 0.5);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      cursor: pointer;
-      user-select: none;
-      margin-top: 12px;
-      transition: background 0.2s ease;
-    }
-
-    .category-header:hover {
-      background: rgba(14, 35, 27, 0.9);
-    }
-
-    .category-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 15px;
-      font-weight: 600;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .dot-needs { background-color: var(--needs-color); box-shadow: 0 0 8px var(--needs-color); }
-    .dot-wants { background-color: var(--wants-color); box-shadow: 0 0 8px var(--wants-color); }
-    .dot-savings { background-color: var(--savings-color); box-shadow: 0 0 8px var(--savings-color); }
-
-    .category-stats {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .category-percent {
-      color: var(--text-sub);
-      font-size: 13px;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-
-    .category-total {
       font-size: 16px;
-      font-weight: 600;
+      box-sizing: border-box;
     }
-
-    .arrow {
-      transition: transform 0.3s ease;
-      font-size: 12px;
-      color: var(--text-sub);
+    .slider-group {
+      margin-bottom: 18px;
     }
-
-    .arrow.collapsed {
-      transform: rotate(-180deg);
-    }
-
-    .category-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px 24px;
-      padding: 20px 16px;
-      border: 1px solid var(--card-border);
-      border-top: none;
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
-      background: rgba(6, 23, 18, 0.2);
-    }
-
-    .category-content.hidden {
-      display: none;
-    }
-
-    .slider-item {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .slider-item label {
-      font-size: 13px;
-      color: var(--text-sub);
+    .slider-header {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 15px;
+      font-weight: 500;
     }
-
-    .slider-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    input[type="range"] {
-      flex: 1;
-      height: 6px;
-      background: #0a2018;
-      border-radius: 3px;
-      outline: none;
-      accent-color: var(--accent-color);
-      cursor: pointer;
-    }
-
-    .slider-value-box {
-      background: var(--input-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 6px 10px;
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      width: 100px;
-    }
-
-    .slider-value-box span {
-      margin-right: 4px;
-      color: var(--text-sub);
-    }
-
-    .slider-value-box input {
+    .slider-group input[type="range"] {
       width: 100%;
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 14px;
-      color: var(--text-main);
-      text-align: right;
     }
-
-    footer {
-      border-top: 1px solid var(--card-border);
-      padding: 40px 20px;
-      text-align: center;
-      font-size: 14px;
-      color: var(--text-sub);
-      margin-top: 60px;
+    .progress-bar-container {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      height: 16px;
+      overflow: hidden;
+      margin-top: 15px;
     }
-
-    @media (max-width: 768px) {
-      .top-grid { grid-template-columns: 1fr; }
-      .summary-header { grid-template-columns: 1fr; }
-      .category-content { grid-template-columns: 1fr; }
-      header { padding: 16px 20px; }
+    .progress-bar {
+      height: 100%;
+      background-color: #28a745;
+      width: 0%;
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+    .results-box {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .result-row.total {
+      font-weight: bold;
+      font-size: 18px;
+      border-top: 2px solid #ddd;
+      padding-top: 10px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
+    <a href="index.html">
+      <i class="fa-solid fa-wrench"></i> Utilixy<span>Tools</span>
     </a>
+    <nav>
+      <a href="index.html">Tools</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
-  <main class="container">
-    <div style="margin-bottom: 24px;">
-      <a href="index.html" style="color: var(--accent-color); text-decoration: none; font-size: 14px; font-weight: 600;">
-        <i class="fa-solid fa-arrow-left"></i> Back to Tools
-      </a>
-    </div>
+  <main>
+    <section class="budget-card">
+      <h1><i class="fa-solid fa-chart-pie"></i> BudgetFlow</h1>
+      <p>Interactive cashflow planner with target allocation bars and real-time category sliders.</p>
 
-    <div class="planner-card">
-      <div class="header-title">
-        <h1>BudgetFlow - Cashflow Planner</h1>
-        <span class="status-badge" id="budgetStatus"><i class="fa-solid fa-circle-check"></i> Balanced</span>
+      <div class="form-group">
+        <label for="monthly-income">Monthly Income ($)</label>
+        <input type="number" id="monthly-income" placeholder="4000" value="4000" oninput="updateBudget()">
       </div>
 
-      <div class="summary-header">
-        <div class="kpi-card">
-          <div class="kpi-label"><i class="fa-solid fa-receipt"></i> Total Expenses</div>
-          <div class="kpi-value" id="totalExpenses">$0</div>
+      <h3>Category Allocation (% of Income)</h3>
+
+      <div class="slider-group">
+        <div class="slider-header">
+          <span>Housing & Utilities (Needs)</span>
+          <span id="housing-val">50% ($2000)</span>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-label"><i class="fa-solid fa-wallet"></i> Monthly Surplus</div>
-          <div class="kpi-value" id="savingsSurplus">$0</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label"><i class="fa-solid fa-chart-line"></i> Savings Rate</div>
-          <div class="kpi-value" id="savingsRate">0%</div>
-        </div>
+        <input type="range" id="housing-slider" min="0" max="100" value="50" oninput="updateBudget()">
       </div>
 
-      <div class="top-grid">
-        <div class="income-group">
-          <div class="kpi-label"><i class="fa-solid fa-money-bill-wave"></i> Monthly Net Income (After Taxes)</div>
-          <div class="income-input-box">
-            <span>$</span>
-            <input type="number" id="netIncome" value="3000" min="0" step="50" />
-          </div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span>Personal & Lifestyle (Wants)</span>
+          <span id="lifestyle-val">30% ($1200)</span>
         </div>
-        <div class="chart-container">
-          <canvas id="budgetChart"></canvas>
-        </div>
+        <input type="range" id="lifestyle-slider" min="0" max="100" value="30" oninput="updateBudget()">
       </div>
 
-      <div class="bar-container">
-        <div class="bar-segment bar-needs" id="barNeeds" style="width: 50%;"></div>
-        <div class="bar-segment bar-wants" id="barWants" style="width: 30%;"></div>
-        <div class="bar-segment bar-savings" id="barSavings" style="width: 20%;"></div>
+      <div class="slider-group">
+        <div class="slider-header">
+          <span>Savings & Investments</span>
+          <span id="savings-val">20% ($800)</span>
+        </div>
+        <input type="range" id="savings-slider" min="0" max="100" value="20" oninput="updateBudget()">
       </div>
 
-      <div class="category-header" onclick="toggleSection('needsContent', 'needsArrow')">
-        <div class="category-title">
-          <span class="dot dot-needs"></span>
-          Essential Needs (50% Target)
+      <div>
+        <div class="slider-header">
+          <span>Total Allocated Budget</span>
+          <span id="allocated-percentage">100%</span>
         </div>
-        <div class="category-stats">
-          <span class="category-percent" id="needsPercent">0%</span>
-          <span class="category-total" id="needsTotal">$0</span>
-          <i class="fa-solid fa-chevron-up arrow" id="needsArrow"></i>
+        <div class="progress-bar-container">
+          <div id="allocation-bar" class="progress-bar"></div>
         </div>
       </div>
 
-      <div class="category-content" id="needsContent">
-        <div class="slider-item">
-          <label>Housing & Utilities</label>
-          <div class="slider-row">
-            <input type="range" class="expense-slider" min="0" max="4000" step="25" value="1100">
-            <div class="slider-value-box">
-              <span>$</span>
-              <input type="number" class="expense-input" value="1100">
-            </div>
-          </div>
+      <div class="results-box">
+        <div class="result-row">
+          <span>Total Monthly Income:</span>
+          <span id="res-income">$4,000.00</span>
         </div>
-
-        <div class="slider-item">
-          <label>Groceries & Essentials</label>
-          <div class="slider-row">
-            <input type="range" class="expense-slider" min="0" max="1500" step="25" value="400">
-            <div class="slider-value-box">
-              <span>$</span>
-              <input type="number" class="expense-input" value="400">
-            </div>
-          </div>
+        <div class="result-row">
+          <span>Total Allocated Expenses:</span>
+          <span id="res-allocated">$4,000.00</span>
         </div>
-
-        <div class="slider-item">
-          <label>Transport / Fuel / Insurance</label>
-          <div class="slider-row">
-            <input type="range" class="expense-slider" min="0" max="1200" step="25" value="300">
-            <div class="slider-value-box">
-              <span>$</span>
-              <input type="number" class="expense-input" value="300">
-            </div>
-          </div>
+        <div class="result-row total">
+          <span>Unallocated Balance:</span>
+          <span id="res-balance">$0.00</span>
         </div>
       </div>
-
-      <div class="category-header" onclick="toggleSection('wantsContent', 'wantsArrow')">
-        <div class="category-title">
-          <span class="dot dot-wants"></span>
-          Discretionary Wants (30% Target)
-        </div>
-        <div class="category-stats">
-          <span class="category-percent" id="wantsPercent">0%</span>
-          <span class="category-total" id="wantsTotal">$0</span>
-          <i class="fa-solid fa-chevron-up arrow collapsed" id="wantsArrow"></i>
-        </div>
-      </div>
-
-      <div class="category-content hidden" id="wantsContent">
-        <div class="slider-item">
-          <label>Dining & Takeout</label>
-          <div class="slider-row">
-            <input type="range" class="expense-slider" min="0" max="1000" step="25" value="250">
-            <div class="slider-value-box">
-              <span>$</span>
-              <input type="number" class="expense-input" value="250">
-            </div>
-          </div>
-        </div>
-
-        <div class="slider-item">
-          <label>Entertainment & Subscriptions</label>
-          <div class="slider-row">
-            <input type="range" class="expense-slider" min="0" max="800" step="25" value="150">
-            <div class="slider-value-box">
-              <span>$</span>
-              <input type="number" class="expense-input" value="150">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="category-header" onclick="toggleSection('savingsContent', 'savingsArrow')">
-        <div class="category-title">
-          <span class="dot dot-savings"></span>
-          Savings & Debt Payoff (20% Target)
-        </div>
-        <div class="category-stats">
-          <span class="category-percent" id="savingsPercent">0%</span>
-          <span class="category-total" id="savingsCategoryTotal">$0</span>
-          <i class="fa-solid fa-chevron-up arrow collapsed" id="savingsArrow"></i>
-        </div>
-      </div>
-
-      <div class="category-content hidden" id="savingsContent">
-        <div class="slider-item">
-          <label>Emergency Fund / Investment</label>
-          <div class="slider-row">
-            <input type="range" class="expense-slider" min="0" max="2000" step="50" value="500">
-            <div class="slider-value-box">
-              <span>$</span>
-              <input type="number" class="expense-input" value="500">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 UtilixyTools. All rights reserved.</p>
+    <p>© 2026 UtilixyTools. All rights reserved.</p>
   </footer>
 
   <script>
-    // Accordion toggle declared in global scope
-    function toggleSection(contentId, arrowId) {
-      const content = document.getElementById(contentId);
-      const arrow = document.getElementById(arrowId);
-      if (content && arrow) {
-        content.classList.toggle('hidden');
-        arrow.classList.toggle('collapsed');
+    function updateBudget() {
+      const income = parseFloat(document.getElementById('monthly-income').value) || 0;
+      
+      const housingPct = parseInt(document.getElementById('housing-slider').value) || 0;
+      const lifestylePct = parseInt(document.getElementById('lifestyle-slider').value) || 0;
+      const savingsPct = parseInt(document.getElementById('savings-slider').value) || 0;
+
+      const housingAmt = (income * housingPct) / 100;
+      const lifestyleAmt = (income * lifestylePct) / 100;
+      const savingsAmt = (income * savingsPct) / 100;
+
+      document.getElementById('housing-val').innerText = `${housingPct}% ($${housingAmt.toFixed(0)})`;
+      document.getElementById('lifestyle-val').innerText = `${lifestylePct}% ($${lifestyleAmt.toFixed(0)})`;
+      document.getElementById('savings-val').innerText = `${savingsPct}% ($${savingsAmt.toFixed(0)})`;
+
+      const totalPct = housingPct + lifestylePct + savingsPct;
+      const totalAllocated = housingAmt + lifestyleAmt + savingsAmt;
+      const balance = income - totalAllocated;
+
+      document.getElementById('allocated-percentage').innerText = `${totalPct}%`;
+      
+      const bar = document.getElementById('allocation-bar');
+      bar.style.width = Math.min(totalPct, 100) + '%';
+      if (totalPct > 100) {
+        bar.style.backgroundColor = '#dc3545'; // Red if over-allocated
+      } else if (totalPct === 100) {
+        bar.style.backgroundColor = '#28a745'; // Green if perfectly allocated
+      } else {
+        bar.style.backgroundColor = '#ffc107'; // Yellow if under-allocated
       }
+
+      document.getElementById('res-income').innerText = '$' + income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('res-allocated').innerText = '$' + totalAllocated.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('res-balance').innerText = '$' + balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const ctx = document.getElementById('budgetChart').getContext('2d');
-      const budgetChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Needs', 'Wants', 'Savings'],
-          datasets: [{
-            data: [1800, 400, 500],
-            backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          cutout: '70%'
-        }
-      });
-
-      function formatCurrency(val) {
-        const isNegative = val < 0;
-        const absVal = Math.abs(val).toLocaleString('en-US');
-        return isNegative ? `-$${absVal}` : `$${absVal}`;
-      }
-
-      function calculateCategoryTotal(containerId) {
-        const sliders = document.querySelectorAll(`#${containerId} .expense-slider`);
-        let total = 0;
-        sliders.forEach(slider => { total += parseFloat(slider.value) || 0; });
-        return total;
-      }
-
-      function calculatePlanner() {
-        const netIncome = parseFloat(document.getElementById('netIncome').value) || 0;
-
-        const needsTotal = calculateCategoryTotal('needsContent');
-        const wantsTotal = calculateCategoryTotal('wantsContent');
-        const savingsCatTotal = calculateCategoryTotal('savingsContent');
-
-        const grandTotal = needsTotal + wantsTotal + savingsCatTotal;
-        const surplus = netIncome - grandTotal;
-        const rate = netIncome > 0 ? Math.round(((savingsCatTotal + Math.max(0, surplus)) / netIncome) * 100) : 0;
-
-        document.getElementById('totalExpenses').textContent = formatCurrency(grandTotal);
-        
-        const surplusEl = document.getElementById('savingsSurplus');
-        surplusEl.textContent = formatCurrency(surplus);
-        surplusEl.className = `kpi-value ${surplus < 0 ? 'negative' : 'positive'}`;
-
-        const statusEl = document.getElementById('budgetStatus');
-        if (surplus < 0) {
-          statusEl.className = 'status-badge negative';
-          statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Over Budget`;
-        } else {
-          statusEl.className = 'status-badge';
-          statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Balanced`;
-        }
-
-        document.getElementById('savingsRate').textContent = `${rate}%`;
-
-        document.getElementById('needsTotal').textContent = formatCurrency(needsTotal);
-        document.getElementById('wantsTotal').textContent = formatCurrency(wantsTotal);
-        document.getElementById('savingsCategoryTotal').textContent = formatCurrency(savingsCatTotal);
-
-        const totalAllocated = grandTotal || 1;
-        const needsPct = Math.round((needsTotal / totalAllocated) * 100);
-        const wantsPct = Math.round((wantsTotal / totalAllocated) * 100);
-        const savingsPct = 100 - needsPct - wantsPct;
-
-        document.getElementById('needsPercent').textContent = `${needsPct}%`;
-        document.getElementById('wantsPercent').textContent = `${wantsPct}%`;
-        document.getElementById('savingsPercent').textContent = `${Math.max(0, savingsPct)}%`;
-
-        document.getElementById('barNeeds').style.width = `${needsPct}%`;
-        document.getElementById('barWants').style.width = `${wantsPct}%`;
-        document.getElementById('barSavings').style.width = `${Math.max(0, savingsPct)}%`;
-
-        budgetChart.data.datasets[0].data = [needsTotal, wantsTotal, savingsCatTotal];
-        budgetChart.update();
-      }
-
-      document.querySelectorAll('.slider-item').forEach(item => {
-        const slider = item.querySelector('.expense-slider');
-        const box = item.querySelector('.expense-input');
-
-        slider.addEventListener('input', (e) => {
-          box.value = e.target.value;
-          calculatePlanner();
-        });
-
-        box.addEventListener('input', (e) => {
-          slider.value = e.target.value || 0;
-          calculatePlanner();
-        });
-      });
-
-      document.getElementById('netIncome').addEventListener('input', calculatePlanner);
-
-      calculatePlanner();
-    });
+    // Initialize on page load
+    updateBudget();
   </script>
 </body>
 </html>
