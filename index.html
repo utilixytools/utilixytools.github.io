@@ -1,375 +1,584 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UtilixyTools</title>
-
-  <link rel="icon" type="image/png" href="logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UtilixyTools - Free Web Tools & Utilities</title>
+  
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    :root {
+      --bg-color: #061712;
+      --card-bg: rgba(14, 35, 27, 0.7);
+      --card-border: rgba(52, 211, 153, 0.15);
+      --accent-color: #10b981;
+      --accent-hover: #059669;
+      --text-main: #f0fdf4;
+      --text-muted: #86efac;
+      --text-sub: #9ca3af;
+      --input-bg: #0a2018;
+    }
+
     * {
       box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #022c22, #064e3b);
-      color: white;
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
+      color: var(--text-main);
       min-height: 100vh;
-      padding: 20px;
+      line-height: 1.6;
     }
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      text-align: center;
-      padding-top: 40px;
+    /* Navigation Bar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      border-bottom: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6, 23, 18, 0.8);
     }
 
     .logo {
-      width: 80px;
-      margin-bottom: 10px;
-    }
-
-    h1 {
-      margin-bottom: 5px;
-    }
-
-    p {
-      color: #d1fae5;
-      margin-bottom: 30px;
-    }
-
-    .tools {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-
-    .tool {
-      background: white;
-      color: black;
-      padding: 20px;
-      border-radius: 16px;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
       text-decoration: none;
-      font-weight: bold;
-      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .tool:hover {
-      transform: translateY(-5px);
-      background: #e5e7eb;
+    .logo span {
+      color: var(--accent-color);
     }
 
-    .tool span {
-      display: block;
-      margin-top: 6px;
+    nav {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      color: #04120e;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 20px 60px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 6px 16px;
+      border-radius: 30px;
       font-size: 13px;
-      color: #6b7280;
-      font-weight: normal;
+      font-weight: 600;
+      margin-bottom: 24px;
     }
 
-    .coming-soon {
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-sub);
+      margin-bottom: 36px;
+    }
+
+    /* Search Bar */
+    .search-box {
+      max-width: 550px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 16px 20px 16px 50px;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      color: var(--text-main);
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    /* Container & Tool Grid */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(52, 211, 153, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .tool-card.disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
 
-    footer {
-      margin-top: 50px;
-      text-align: center;
+    .tool-card.disabled:hover {
+      transform: none;
+      border-color: var(--card-border);
+      box-shadow: none;
     }
 
-    footer a {
-      color: #d1fae5;
-      margin: 0 10px;
-      text-decoration: none;
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(16, 185, 129, 0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-color);
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .tool-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .tool-card p {
       font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 20px;
     }
 
-    footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* AUTO SUPPORT CHAT */
-    .chat-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #10b981;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 14px 20px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      z-index: 1000;
-    }
-
-    .chat-box {
-      position: fixed;
-      bottom: 80px;
-      right: 20px;
-      width: 320px;
-      max-width: calc(100% - 40px);
-      background: white;
-      color: black;
-      border-radius: 18px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.35);
-      overflow: hidden;
-      display: none;
-      z-index: 1000;
-    }
-
-    .chat-header {
-      background: #065f46;
-      color: white;
-      padding: 14px;
-      font-weight: bold;
+    .tool-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-color);
     }
 
-    .chat-header button {
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .chat-messages {
-      height: 260px;
-      overflow-y: auto;
-      padding: 12px;
-      background: #f9fafb;
-    }
-
-    .message {
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: 12px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .user-message {
-      background: #d1fae5;
-      margin-left: 35px;
-      text-align: right;
-    }
-
-    .bot-message {
-      background: #e5e7eb;
-      margin-right: 35px;
-      text-align: left;
-    }
-
-    .chat-input {
-      display: flex;
-      border-top: 1px solid #ddd;
-    }
-
-    .chat-input input {
-      flex: 1;
-      border: none;
-      padding: 12px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .chat-input button {
-      border: none;
-      background: #10b981;
-      color: white;
-      padding: 12px 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .quick-replies {
-      padding: 10px;
-      background: white;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .quick-replies button {
-      border: none;
-      background: #ecfdf5;
-      color: #065f46;
-      padding: 7px 10px;
+    .tool-footer .badge-soon {
+      color: #f59e0b;
+      background: rgba(245, 158, 11, 0.15);
+      padding: 4px 10px;
       border-radius: 20px;
-      cursor: pointer;
       font-size: 12px;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 60px;
+      padding-top: 60px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .feature-item {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .feature-item i {
+      font-size: 28px;
+      color: var(--accent-color);
+      margin-bottom: 12px;
+    }
+
+    .feature-item h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .feature-item p {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-sub);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-main);
+    }
+
+    /* Chat Support Widget */
+    .chat-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent-color);
+      color: #04120e;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+    }
+
+    .chat-modal {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 320px;
+      background: #0a2018;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+
+    .chat-modal.active {
+      display: block;
+    }
+
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .chat-close {
+      cursor: pointer;
+      color: var(--text-sub);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      header { padding: 16px 20px; }
+      nav { display: none; }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="container">
-
-    <img src="logo.png" class="logo" alt="logo">
-
-    <h1>UtilixyTools</h1>
-    <p>Free tools to make your life easier</p>
-
-    <div class="tools">
-
-      <a href="budget.html" class="tool">
-        💰 BudgetFlow
-        <span>Track your income & expenses</span>
-      </a>
-
-      <a href="tax.html" class="tool">
-        🧾 Quebec Tax Calculator
-        <span>Calculate TPS & TVQ</span>
-      </a>
-
-      <a href="saving.html" class="tool">
-        🎯 Savings Goal
-        <span>Reach your savings target faster</span>
-      </a>
-
-      <a href="currency.html" class="tool">
-        💱 Currency Converter
-        <span>Convert currencies in real time</span>
-      </a>
-
-      <div class="tool coming-soon">
-        💵 Tip Calculator
-        <span>Coming soon</span>
-      </div>
-
-      <div class="tool coming-soon">
-        👥 Split Bill
-        <span>Coming soon</span>
-      </div>
-
-      <div class="tool coming-soon">
-        🏠 Rent Splitter
-        <span>Coming soon</span>
-      </div>
-
-    </div>
-
-    <footer>
-      <a href="about.html">About</a>
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
+    </a>
+    <nav>
+      <a href="#tools">Tools</a>
+      <a href="#about">About</a>
       <a href="privacy.html">Privacy Policy</a>
-      <a href="contact.html">Contact</a>
-    </footer>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#tools" class="btn-primary">Explore Tools <i class="fa-solid fa-arrow-right"></i></a>
+  </header>
 
-  </div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-badge">
+      <i class="fa-solid fa-sparkles"></i> Free tools to make your life easier
+    </div>
+    <h1>Powerful Web Tools Built for Everyday Productivity</h1>
+    <p>Access intuitive financial planners, tax calculators, and utilities directly in your browser.</p>
 
-  <!-- AUTO SUPPORT CHAT -->
-  <button class="chat-button" onclick="toggleChat()">💬 Support</button>
+    <!-- Search Input -->
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search tools (e.g. Budget, Tax, Savings)..." onkeyup="filterTools()">
+    </div>
+  </section>
 
-  <div class="chat-box" id="chatBox">
-    <div class="chat-header">
-      Auto Support
-      <button onclick="toggleChat()">×</button>
+  <!-- Main Tools Grid -->
+  <main class="container" id="tools">
+    <div class="section-title">
+      <h2>Featured Tools</h2>
     </div>
 
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot-message">
-        Hi 👋 How can I help you today?
+    <div class="tools-grid" id="toolsGrid">
+
+      <!-- Tool 1: BudgetFlow -->
+      <a href="budgetflow.html" class="tool-card">
+        <div>
+          <div class="tool-icon"><i class="fa-solid fa-wallet"></i></div>
+          <h3>BudgetFlow</h3>
+          <p>Track your income & expenses with intuitive budgeting tools and real-time visual balance tracking.</p>
+        </div>
+        <div class="tool-footer">
+          <span>Launch Tool</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </a>
+
+      <!-- Tool 2: Quebec Tax Calculator -->
+      <a href="tax-calculator.html" class="tool-card">
+        <div>
+          <div class="tool-icon"><i class="fa-solid fa-receipt"></i></div>
+          <h3>Quebec Tax Calculator</h3>
+          <p>Calculate TPS & TVQ accurately for commercial and personal purchases in Quebec.</p>
+        </div>
+        <div class="tool-footer">
+          <span>Launch Tool</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </a>
+
+      <!-- Tool 3: Savings Goal -->
+      <a href="savings-goal.html" class="tool-card">
+        <div>
+          <div class="tool-icon"><i class="fa-solid fa-bullseye"></i></div>
+          <h3>Savings Goal</h3>
+          <p>Plan ahead, set targets, and reach your savings milestones faster with compounding projections.</p>
+        </div>
+        <div class="tool-footer">
+          <span>Launch Tool</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </a>
+
+      <!-- Tool 4: Currency Converter -->
+      <a href="currency-converter.html" class="tool-card">
+        <div>
+          <div class="tool-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+          <h3>Currency Converter</h3>
+          <p>Convert world currencies in real time with up-to-date exchange rates.</p>
+        </div>
+        <div class="tool-footer">
+          <span>Launch Tool</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </a>
+
+      <!-- Tool 5: Tip Calculator -->
+      <div class="tool-card disabled">
+        <div>
+          <div class="tool-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+          <h3>Tip Calculator</h3>
+          <p>Quickly calculate gratuities and split amounts seamlessly during dining out.</p>
+        </div>
+        <div class="tool-footer">
+          <span class="badge-soon">Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- Tool 6: Split Bill -->
+      <div class="tool-card disabled">
+        <div>
+          <div class="tool-icon"><i class="fa-solid fa-users"></i></div>
+          <h3>Split Bill</h3>
+          <p>Fairly divide shared bills, group dinners, and group expenses without hassle.</p>
+        </div>
+        <div class="tool-footer">
+          <span class="badge-soon">Coming Soon</span>
+        </div>
+      </div>
+
+      <!-- Tool 7: Rent Splitter -->
+      <div class="tool-card disabled">
+        <div>
+          <div class="tool-icon"><i class="fa-solid fa-house"></i></div>
+          <h3>Rent Splitter</h3>
+          <p>Split apartment rent fairly based on room sizes, amenities, and income.</p>
+        </div>
+        <div class="tool-footer">
+          <span class="badge-soon">Coming Soon</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Features -->
+    <div class="features" id="about">
+      <div class="feature-item">
+        <i class="fa-solid fa-bolt"></i>
+        <h4>Lightning Fast</h4>
+        <p>Runs directly in your browser with zero server latency.</p>
+      </div>
+      <div class="feature-item">
+        <i class="fa-solid fa-shield-halved"></i>
+        <h4>100% Private</h4>
+        <p>Your data stays on your device and is never uploaded or tracked.</p>
+      </div>
+      <div class="feature-item">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <h4>Fully Responsive</h4>
+        <p>Seamlessly optimized for mobile phones, tablets, and desktops.</p>
       </div>
     </div>
+  </main>
 
-    <div class="quick-replies">
-      <button onclick="quickReply('budget')">Budget tool</button>
-      <button onclick="quickReply('tax')">Tax calculator</button>
-      <button onclick="quickReply('currency')">Currency</button>
-      <button onclick="quickReply('contact')">Contact</button>
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="#contact">Contact</a>
     </div>
+    <p>&copy; 2026 UtilixyTools. All rights reserved.</p>
+  </footer>
 
-    <div class="chat-input">
-      <input type="text" id="userInput" placeholder="Type your message..." onkeydown="handleEnter(event)">
-      <button onclick="sendMessage()">Send</button>
+  <!-- Floating Chat Support -->
+  <button class="chat-btn" onclick="toggleChat()">
+    <i class="fa-solid fa-comments"></i> Support
+  </button>
+
+  <div class="chat-modal" id="chatModal">
+    <div class="chat-header">
+      <span>Auto Support</span>
+      <span class="chat-close" onclick="toggleChat()">&times;</span>
+    </div>
+    <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 12px;">
+      Hi 👋 How can I help you today? Select an option below:
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <a href="budgetflow.html" style="color: var(--accent-color); font-size: 13px; text-decoration: none;">• Budget Tool</a>
+      <a href="tax-calculator.html" style="color: var(--accent-color); font-size: 13px; text-decoration: none;">• Tax Calculator</a>
+      <a href="currency-converter.html" style="color: var(--accent-color); font-size: 13px; text-decoration: none;">• Currency Converter</a>
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
+    function filterTools() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.tool-card');
+
+      cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const desc = card.querySelector('p').textContent.toLowerCase();
+        if (title.includes(input) || desc.includes(input)) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
     function toggleChat() {
-      const chatBox = document.getElementById("chatBox");
-      chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
-    }
-
-    function handleEnter(event) {
-      if (event.key === "Enter") {
-        sendMessage();
-      }
-    }
-
-    function quickReply(text) {
-      document.getElementById("userInput").value = text;
-      sendMessage();
-    }
-
-    function sendMessage() {
-      const input = document.getElementById("userInput");
-      const message = input.value.trim();
-
-      if (message === "") return;
-
-      addMessage(message, "user-message");
-
-      const reply = getAutoReply(message);
-
-      setTimeout(() => {
-        addMessage(reply, "bot-message");
-      }, 500);
-
-      input.value = "";
-    }
-
-    function addMessage(text, className) {
-      const chatMessages = document.getElementById("chatMessages");
-
-      const messageDiv = document.createElement("div");
-      messageDiv.className = "message " + className;
-      messageDiv.textContent = text;
-
-      chatMessages.appendChild(messageDiv);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function getAutoReply(message) {
-      const text = message.toLowerCase();
-
-      if (text.includes("budget")) {
-        return "You can use BudgetFlow to track your income and expenses. Click on the BudgetFlow tool from the homepage.";
-      }
-
-      if (text.includes("tax") || text.includes("tps") || text.includes("tvq")) {
-        return "You can use the Quebec Tax Calculator to calculate TPS and TVQ quickly.";
-      }
-
-      if (text.includes("saving") || text.includes("goal")) {
-        return "The Savings Goal tool helps you calculate how much to save to reach your target.";
-      }
-
-      if (text.includes("currency") || text.includes("exchange") || text.includes("convert")) {
-        return "Use the Currency Converter to convert currencies in real time.";
-      }
-
-      if (text.includes("contact") || text.includes("help") || text.includes("support")) {
-        return "You can contact us through the Contact page at the bottom of the website.";
-      }
-
-      if (text.includes("hello") || text.includes("hi") || text.includes("hey")) {
-        return "Hello 👋 Welcome to UtilixyTools. How can I help you?";
-      }
-
-      return "Thank you for your message. Our team will respond as soon as possible.";
+      const modal = document.getElementById('chatModal');
+      modal.classList.toggle('active');
     }
   </script>
-
 </body>
 </html>
