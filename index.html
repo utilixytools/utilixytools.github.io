@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UtilixyTools - Free Web Tools & Utilities</title>
   
-  <!-- Google Fonts & FontAwesome Icons -->
+  <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -20,6 +20,7 @@
       --text-muted: #86efac;
       --text-sub: #9ca3af;
       --input-bg: #0a2018;
+      --accent-glow: rgba(16, 185, 129, 0.15);
     }
 
     * {
@@ -37,9 +38,10 @@
       color: var(--text-main);
       min-height: 100vh;
       line-height: 1.6;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Navigation Bar */
     header {
       display: flex;
       justify-content: space-between;
@@ -69,12 +71,11 @@
 
     nav {
       display: flex;
-      gap: 24px;
-      align-items: center;
+      gap: 20px;
     }
 
     nav a {
-      color: var(--text-muted);
+      color: var(--text-sub);
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
@@ -82,502 +83,229 @@
     }
 
     nav a:hover {
-      color: var(--text-main);
+      color: var(--accent-color);
     }
 
-    .btn-primary {
-      background: var(--accent-color);
-      color: #04120e;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-      transform: translateY(-2px);
-    }
-
-    /* Hero Section */
     .hero {
       text-align: center;
-      padding: 80px 20px 60px;
-      max-width: 900px;
+      padding: 60px 20px 40px;
+      max-width: 800px;
       margin: 0 auto;
     }
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 6px 16px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 24px;
-    }
-
     .hero h1 {
-      font-size: 48px;
+      font-size: 42px;
       font-weight: 800;
-      letter-spacing: -1px;
-      line-height: 1.2;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
     }
 
     .hero p {
       font-size: 18px;
       color: var(--text-sub);
-      margin-bottom: 36px;
+      margin-bottom: 30px;
     }
 
-    /* Search Bar */
     .search-box {
-      max-width: 550px;
-      margin: 0 auto 40px;
       position: relative;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 16px 20px 16px 50px;
-      background: var(--input-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      color: var(--text-main);
-      font-size: 16px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .search-box input:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+      max-width: 500px;
+      margin: 0 auto;
     }
 
     .search-box i {
       position: absolute;
-      left: 20px;
+      left: 18px;
       top: 50%;
       transform: translateY(-50%);
-      color: var(--text-muted);
+      color: var(--text-sub);
+      font-size: 16px;
     }
 
-    /* Container & Tool Grid */
+    .search-box input {
+      width: 100%;
+      padding: 14px 20px 14px 48px;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      color: var(--text-main);
+      font-size: 15px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px 80px;
+      max-width: 1100px;
+      margin: 20px auto 60px;
+      padding: 0 20px;
+      flex: 1;
     }
 
-    .section-title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 28px;
-    }
-
-    .tools-grid {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
     }
 
     .tool-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 28px;
+      border-radius: 18px;
+      padding: 24px;
+      text-decoration: none;
+      color: var(--text-main);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      color: inherit;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
     }
 
     .tool-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(52, 211, 153, 0.4);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      border-color: var(--accent-color);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
 
-    .tool-card.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .tool-card.disabled:hover {
-      transform: none;
-      border-color: var(--card-border);
-      box-shadow: none;
-    }
-
-    .tool-icon {
+    .card-icon {
       width: 48px;
       height: 48px;
-      background: rgba(16, 185, 129, 0.15);
+      background: rgba(16, 185, 129, 0.1);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--accent-color);
       font-size: 20px;
-      margin-bottom: 20px;
+      color: var(--accent-color);
+      margin-bottom: 16px;
     }
 
-    .tool-card h3 {
+    .card-title {
       font-size: 18px;
       font-weight: 700;
       margin-bottom: 8px;
     }
 
-    .tool-card p {
-      font-size: 14px;
+    .card-desc {
+      font-size: 13px;
       color: var(--text-sub);
-      margin-bottom: 20px;
+      line-height: 1.5;
     }
 
-    .tool-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--accent-color);
-    }
-
-    .tool-footer .badge-soon {
-      color: #f59e0b;
-      background: rgba(245, 158, 11, 0.15);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-    }
-
-    /* Features */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 60px;
-      padding-top: 60px;
-      border-top: 1px solid var(--card-border);
-    }
-
-    .feature-item {
-      text-align: center;
-      padding: 20px;
-    }
-
-    .feature-item i {
-      font-size: 28px;
-      color: var(--accent-color);
-      margin-bottom: 12px;
-    }
-
-    .feature-item h4 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .feature-item p {
-      font-size: 13px;
+    .card-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
       color: var(--text-sub);
     }
 
-    /* Footer */
     footer {
       border-top: 1px solid var(--card-border);
-      padding: 40px 20px;
+      padding: 30px 20px;
       text-align: center;
       font-size: 14px;
       color: var(--text-sub);
+      background: rgba(6, 23, 18, 0.6);
     }
 
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 16px;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-
-    .footer-links a:hover {
-      color: var(--text-main);
-    }
-
-    /* Chat Support Widget */
-    .chat-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--accent-color);
-      color: #04120e;
-      border: none;
-      border-radius: 50px;
-      padding: 12px 20px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 1000;
-    }
-
-    .chat-modal {
-      display: none;
-      position: fixed;
-      bottom: 80px;
-      right: 24px;
-      width: 320px;
-      background: #0a2018;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      z-index: 1000;
-    }
-
-    .chat-modal.active {
-      display: block;
-    }
-
-    .chat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-
-    .chat-close {
-      cursor: pointer;
-      color: var(--text-sub);
-    }
-
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .hero h1 { font-size: 32px; }
-      header { padding: 16px 20px; }
       nav { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
   <header>
     <a href="index.html" class="logo">
       <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
     </a>
     <nav>
-      <a href="#tools">Tools</a>
-      <a href="#about">About</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="#contact">Contact</a>
+      <a href="index.html">Tools</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </nav>
-    <a href="#tools" class="btn-primary">Explore Tools <i class="fa-solid fa-arrow-right"></i></a>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-badge">
-      <i class="fa-solid fa-sparkles"></i> Free tools to make your life easier
-    </div>
-    <h1>Powerful Web Tools Built for Everyday Productivity</h1>
-    <p>Access intuitive financial planners, tax calculators, and utilities directly in your browser.</p>
-
-    <!-- Search Input -->
-    <div class="search-box">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="Search tools (e.g. Budget, Tax, Savings)..." onkeyup="filterTools()">
-    </div>
-  </section>
-
-  <!-- Main Tools Grid -->
-  <main class="container" id="tools">
-    <div class="section-title">
-      <h2>Featured Tools</h2>
-    </div>
-
-    <div class="tools-grid" id="toolsGrid">
-
-      <!-- Tool 1: BudgetFlow -->
-      <a href="budgetflow.html" class="tool-card">
-        <div>
-          <div class="tool-icon"><i class="fa-solid fa-wallet"></i></div>
-          <h3>BudgetFlow</h3>
-          <p>Track your income & expenses with intuitive budgeting tools and real-time visual balance tracking.</p>
-        </div>
-        <div class="tool-footer">
-          <span>Launch Tool</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </a>
-
-      <!-- Tool 2: Quebec Tax Calculator -->
-      <a href="tax-calculator.html" class="tool-card">
-        <div>
-          <div class="tool-icon"><i class="fa-solid fa-receipt"></i></div>
-          <h3>Quebec Tax Calculator</h3>
-          <p>Calculate TPS & TVQ accurately for commercial and personal purchases in Quebec.</p>
-        </div>
-        <div class="tool-footer">
-          <span>Launch Tool</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </a>
-
-      <!-- Tool 3: Savings Goal -->
-      <a href="savings-goal.html" class="tool-card">
-        <div>
-          <div class="tool-icon"><i class="fa-solid fa-bullseye"></i></div>
-          <h3>Savings Goal</h3>
-          <p>Plan ahead, set targets, and reach your savings milestones faster with compounding projections.</p>
-        </div>
-        <div class="tool-footer">
-          <span>Launch Tool</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </a>
-
-      <!-- Tool 4: Currency Converter -->
-      <a href="currency-converter.html" class="tool-card">
-        <div>
-          <div class="tool-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
-          <h3>Currency Converter</h3>
-          <p>Convert world currencies in real time with up-to-date exchange rates.</p>
-        </div>
-        <div class="tool-footer">
-          <span>Launch Tool</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </a>
-
-      <!-- Tool 5: Tip Calculator -->
-      <div class="tool-card disabled">
-        <div>
-          <div class="tool-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-          <h3>Tip Calculator</h3>
-          <p>Quickly calculate gratuities and split amounts seamlessly during dining out.</p>
-        </div>
-        <div class="tool-footer">
-          <span class="badge-soon">Coming Soon</span>
-        </div>
+  <main>
+    <section class="hero">
+      <h1>Smart Web Tools Made Simple</h1>
+      <p>Fast, privacy-focused calculators and financial utilities right in your browser.</p>
+      
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search tools..." onkeyup="filterTools()">
       </div>
+    </section>
 
-      <!-- Tool 6: Split Bill -->
-      <div class="tool-card disabled">
-        <div>
-          <div class="tool-icon"><i class="fa-solid fa-users"></i></div>
-          <h3>Split Bill</h3>
-          <p>Fairly divide shared bills, group dinners, and group expenses without hassle.</p>
-        </div>
-        <div class="tool-footer">
-          <span class="badge-soon">Coming Soon</span>
-        </div>
-      </div>
+    <div class="container">
+      <div class="grid" id="toolsGrid">
+        
+        <a href="tax.html" class="tool-card" data-title="quebec sales tax calculator">
+          <div>
+            <div class="card-icon"><i class="fa-solid fa-calculator"></i></div>
+            <div class="card-title">Quebec Tax Calculator</div>
+            <div class="card-desc">Calculate GST (5%) and QST (9.975%) or extract taxes from total prices instantly.</div>
+          </div>
+        </a>
 
-      <!-- Tool 7: Rent Splitter -->
-      <div class="tool-card disabled">
-        <div>
-          <div class="tool-icon"><i class="fa-solid fa-house"></i></div>
-          <h3>Rent Splitter</h3>
-          <p>Split apartment rent fairly based on room sizes, amenities, and income.</p>
-        </div>
-        <div class="tool-footer">
-          <span class="badge-soon">Coming Soon</span>
-        </div>
-      </div>
+        <a href="budget.html" class="tool-card" data-title="budgetflow expense planner cashflow">
+          <div>
+            <div class="card-icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <div class="card-title">BudgetFlow</div>
+            <div class="card-desc">Interactive cashflow planner with target allocation bars and real-time category sliders.</div>
+          </div>
+        </a>
 
-    </div>
+        <a href="saving.html" class="tool-card" data-title="savings goal calculator target compound interest">
+          <div>
+            <div class="card-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+            <div class="card-title">Savings Goal</div>
+            <div class="card-desc">Calculate monthly deposit targets and projected interest growth to reach financial milestones.</div>
+          </div>
+        </a>
 
-    <!-- Features -->
-    <div class="features" id="about">
-      <div class="feature-item">
-        <i class="fa-solid fa-bolt"></i>
-        <h4>Lightning Fast</h4>
-        <p>Runs directly in your browser with zero server latency.</p>
-      </div>
-      <div class="feature-item">
-        <i class="fa-solid fa-shield-halved"></i>
-        <h4>100% Private</h4>
-        <p>Your data stays on your device and is never uploaded or tracked.</p>
-      </div>
-      <div class="feature-item">
-        <i class="fa-solid fa-mobile-screen-button"></i>
-        <h4>Fully Responsive</h4>
-        <p>Seamlessly optimized for mobile phones, tablets, and desktops.</p>
+        <a href="currency.html" class="tool-card" data-title="currency converter exchange rates cad usd eur gbp">
+          <div>
+            <div class="card-icon"><i class="fa-solid fa-coins"></i></div>
+            <div class="card-title">Currency Converter</div>
+            <div class="card-desc">Quickly convert between CAD, USD, EUR, and GBP with live exchange rate calculations.</div>
+          </div>
+        </a>
+
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer id="contact">
-    <div class="footer-links">
-      <a href="#about">About</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="#contact">Contact</a>
-    </div>
+  <footer>
     <p>&copy; 2026 UtilixyTools. All rights reserved.</p>
   </footer>
 
-  <!-- Floating Chat Support -->
-  <button class="chat-btn" onclick="toggleChat()">
-    <i class="fa-solid fa-comments"></i> Support
-  </button>
-
-  <div class="chat-modal" id="chatModal">
-    <div class="chat-header">
-      <span>Auto Support</span>
-      <span class="chat-close" onclick="toggleChat()">&times;</span>
-    </div>
-    <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 12px;">
-      Hi 👋 How can I help you today? Select an option below:
-    </p>
-    <div style="display: flex; flex-direction: column; gap: 8px;">
-      <a href="budgetflow.html" style="color: var(--accent-color); font-size: 13px; text-decoration: none;">• Budget Tool</a>
-      <a href="tax-calculator.html" style="color: var(--accent-color); font-size: 13px; text-decoration: none;">• Tax Calculator</a>
-      <a href="currency-converter.html" style="color: var(--accent-color); font-size: 13px; text-decoration: none;">• Currency Converter</a>
-    </div>
-  </div>
-
-  <!-- Scripts -->
   <script>
     function filterTools() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
+      const query = document.getElementById('searchInput').value.toLowerCase();
       const cards = document.querySelectorAll('.tool-card');
 
       cards.forEach(card => {
-        const title = card.querySelector('h3').textContent.toLowerCase();
-        const desc = card.querySelector('p').textContent.toLowerCase();
-        if (title.includes(input) || desc.includes(input)) {
-          card.style.display = "flex";
+        const title = card.getAttribute('data-title');
+        if (title.includes(query)) {
+          card.style.display = 'flex';
         } else {
-          card.style.display = "none";
+          card.style.display = 'none';
         }
       });
-    }
-
-    function toggleChat() {
-      const modal = document.getElementById('chatModal');
-      modal.classList.toggle('active');
     }
   </script>
 </body>
