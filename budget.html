@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BudgetFlow - UtilixyTools</title>
   
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts & FontAwesome -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -19,55 +22,377 @@
       --text-muted: #86efac;
       --text-sub: #9ca3af;
       --input-bg: #0a2018;
+      
+      --needs-color: #3b82f6;
+      --wants-color: #10b981;
+      --savings-color: #8b5cf6;
+      --danger-color: #ef4444;
+      --accent-glow: rgba(16, 185, 129, 0.15);
     }
 
-    * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: var(--bg-color);
-      background-image: radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
       color: var(--text-main);
       min-height: 100vh;
+      line-height: 1.6;
     }
 
+    /* Navigation Header */
     header {
-      display: flex; justify-content: space-between; align-items: center; padding: 20px 8%;
-      border-bottom: 1px solid var(--card-border); backdrop-filter: blur(12px); background: rgba(6, 23, 18, 0.8);
-    }
-    .logo { font-size: 22px; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; }
-    .logo span { color: var(--accent-color); }
-
-    .container { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
-    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
-    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-
-    .tool-card {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      border-bottom: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(6, 23, 18, 0.8);
     }
 
-    .stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-    .stat-box { background: rgba(6, 23, 18, 0.5); padding: 18px; border-radius: 12px; border: 1px solid var(--card-border); }
-    .stat-box label { font-size: 12px; color: var(--text-sub); display: block; }
-    .stat-box .val { font-size: 20px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-    .input-group { margin-bottom: 16px; }
-    .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
-    .input-group input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-main); outline: none; }
+    .logo span {
+      color: var(--accent-color);
+    }
 
-    .btn { background: var(--accent-color); color: #04120e; padding: 12px; width: 100%; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-    .btn:hover { background: var(--accent-hover); }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
 
-    .progress-bar-bg { background: var(--input-bg); height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; border: 1px solid var(--card-border); }
-    .progress-bar-fill { background: var(--accent-color); height: 100%; width: 0%; transition: width 0.3s; }
+    .planner-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
 
-    .expense-list { list-style: none; margin-top: 16px; }
-    .expense-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(6, 23, 18, 0.4); border: 1px solid var(--card-border); border-radius: 10px; margin-bottom: 8px; }
-    .del-btn { color: #ef4444; cursor: pointer; background: none; border: none; font-size: 14px; }
+    .header-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
 
-    footer { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
+    .header-title h1 {
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-badge {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-color);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-badge.negative {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger-color);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    /* KPI Summary Row */
+    .summary-header {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-card {
+      background: rgba(6, 23, 18, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .kpi-value.negative { color: var(--danger-color); }
+    .kpi-value.positive { color: var(--accent-color); }
+
+    /* Top Grid: Income + Doughnut Chart */
+    .top-grid {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 32px;
+      background: rgba(6, 23, 18, 0.4);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+    }
+
+    .income-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .income-input-box {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .income-input-box:focus-within {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .income-input-box span {
+      margin-right: 8px;
+      color: var(--text-sub);
+    }
+
+    .income-input-box input {
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      font-weight: 600;
+      width: 100%;
+      outline: none;
+      color: var(--text-main);
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 200px;
+      height: 140px;
+      margin: 0 auto;
+    }
+
+    /* Ratio Segment Bar */
+    .bar-container {
+      height: 10px;
+      width: 100%;
+      background-color: var(--input-bg);
+      border-radius: 6px;
+      display: flex;
+      overflow: hidden;
+      margin-bottom: 32px;
+      border: 1px solid var(--card-border);
+    }
+
+    .bar-segment {
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    .bar-needs { background-color: var(--needs-color); }
+    .bar-wants { background-color: var(--wants-color); }
+    .bar-savings { background-color: var(--savings-color); }
+
+    /* Category Accordion Header */
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: rgba(6, 23, 18, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      margin-top: 12px;
+      transition: background 0.2s ease;
+    }
+
+    .category-header:hover {
+      background: rgba(14, 35, 27, 0.9);
+    }
+
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-needs { background-color: var(--needs-color); box-shadow: 0 0 8px var(--needs-color); }
+    .dot-wants { background-color: var(--wants-color); box-shadow: 0 0 8px var(--wants-color); }
+    .dot-savings { background-color: var(--savings-color); box-shadow: 0 0 8px var(--savings-color); }
+
+    .category-stats {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .category-percent {
+      color: var(--text-sub);
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .category-total {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .arrow {
+      transition: transform 0.3s ease;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .arrow.collapsed {
+      transform: rotate(-180deg);
+    }
+
+    /* Category Input Grid */
+    .category-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 24px;
+      padding: 20px 16px;
+      border: 1px solid var(--card-border);
+      border-top: none;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      background: rgba(6, 23, 18, 0.2);
+    }
+
+    .category-content.hidden {
+      display: none;
+    }
+
+    .slider-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slider-item label {
+      font-size: 13px;
+      color: var(--text-sub);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      height: 6px;
+      background: #0a2018;
+      border-radius: 3px;
+      outline: none;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .slider-value-box {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      width: 100px;
+    }
+
+    .slider-value-box span {
+      margin-right: 4px;
+      color: var(--text-sub);
+    }
+
+    .slider-value-box input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      color: var(--text-main);
+      text-align: right;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .top-grid { grid-template-columns: 1fr; }
+      .summary-header { grid-template-columns: 1fr; }
+      .category-content { grid-template-columns: 1fr; }
+      header { padding: 16px 20px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Navigation Bar -->
   <header>
     <a href="index.html" class="logo">
       <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
@@ -76,59 +401,163 @@
 
   <main class="container">
     <div style="margin-bottom: 24px;">
-      <a href="index.html" style="color: var(--accent-color); text-decoration: none; font-size: 14px; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Back to Tools</a>
-      <h1 style="font-size: 32px; font-weight: 800; margin-top: 12px;">BudgetFlow</h1>
-      <p style="color: var(--text-sub);">Manage your monthly budget and expenses seamlessly.</p>
+      <a href="index.html" style="color: var(--accent-color); text-decoration: none; font-size: 14px; font-weight: 600;">
+        <i class="fa-solid fa-arrow-left"></i> Back to Tools
+      </a>
     </div>
 
-    <div class="stat-cards">
-      <div class="stat-box">
-        <label>Total Income</label>
-        <div class="val" id="incomeVal">$0.00</div>
-      </div>
-      <div class="stat-box">
-        <label>Total Expenses</label>
-        <div class="val" id="expenseVal">$0.00</div>
-      </div>
-      <div class="stat-box">
-        <label>Remaining Balance</label>
-        <div class="val" id="balanceVal" style="color: var(--accent-color);">$0.00</div>
-      </div>
-    </div>
-
-    <div class="grid">
-      <!-- Controls Panel -->
-      <div class="tool-card">
-        <h3 style="margin-bottom: 16px;">Set Budget</h3>
-        <div class="input-group">
-          <label>Monthly Income ($)</label>
-          <input type="number" id="incomeInput" placeholder="5000">
-        </div>
-        <button class="btn" onclick="updateIncome()" style="margin-bottom: 24px;">Update Income</button>
-
-        <h3 style="margin-bottom: 16px;">Add Expense</h3>
-        <div class="input-group">
-          <label>Expense Name</label>
-          <input type="text" id="expName" placeholder="Groceries">
-        </div>
-        <div class="input-group">
-          <label>Amount ($)</label>
-          <input type="number" id="expAmount" placeholder="150">
-        </div>
-        <button class="btn" onclick="addExpense()">Add Expense</button>
+    <div class="planner-card">
+      <div class="header-title">
+        <h1>BudgetFlow - Cashflow Planner</h1>
+        <span class="status-badge" id="budgetStatus"><i class="fa-solid fa-circle-check"></i> Balanced</span>
       </div>
 
-      <!-- Overview Panel -->
-      <div class="tool-card">
-        <h3>Budget Usage</h3>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="progressFill"></div>
+      <!-- KPI Summaries -->
+      <div class="summary-header">
+        <div class="kpi-card">
+          <div class="kpi-label"><i class="fa-solid fa-receipt"></i> Total Expenses</div>
+          <div class="kpi-value" id="totalExpenses">$0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><i class="fa-solid fa-wallet"></i> Monthly Surplus</div>
+          <div class="kpi-value" id="savingsSurplus">$0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label"><i class="fa-solid fa-chart-line"></i> Savings Rate</div>
+          <div class="kpi-value" id="savingsRate">0%</div>
+        </div>
+      </div>
+
+      <!-- Income Input & Doughnut Chart -->
+      <div class="top-grid">
+        <div class="income-group">
+          <div class="kpi-label"><i class="fa-solid fa-money-bill-wave"></i> Monthly Net Income (After Taxes)</div>
+          <div class="income-input-box">
+            <span>$</span>
+            <input type="number" id="netIncome" value="3000" min="0" step="50" />
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="budgetChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Category Breakdown Bar -->
+      <div class="bar-container">
+        <div class="bar-segment bar-needs" id="barNeeds" style="width: 50%;"></div>
+        <div class="bar-segment bar-wants" id="barWants" style="width: 30%;"></div>
+        <div class="bar-segment bar-savings" id="barSavings" style="width: 20%;"></div>
+      </div>
+
+      <!-- Category 1: Needs -->
+      <div class="category-header" onclick="toggleSection('needsContent', 'needsArrow')">
+        <div class="category-title">
+          <span class="dot dot-needs"></span>
+          Essential Needs (50% Target)
+        </div>
+        <div class="category-stats">
+          <span class="category-percent" id="needsPercent">0%</span>
+          <span class="category-total" id="needsTotal">$0</span>
+          <i class="fa-solid fa-chevron-up arrow" id="needsArrow"></i>
+        </div>
+      </div>
+
+      <div class="category-content" id="needsContent">
+        <div class="slider-item">
+          <label>Housing & Utilities</label>
+          <div class="slider-row">
+            <input type="range" class="expense-slider" min="0" max="4000" step="25" value="1100">
+            <div class="slider-value-box">
+              <span>$</span>
+              <input type="number" class="expense-input" value="1100">
+            </div>
+          </div>
         </div>
 
-        <h3 style="margin-top: 28px; margin-bottom: 12px;">Expense History</h3>
-        <ul class="expense-list" id="expenseList">
-          <!-- Expenses render dynamically -->
-        </ul>
+        <div class="slider-item">
+          <label>Groceries & Essentials</label>
+          <div class="slider-row">
+            <input type="range" class="expense-slider" min="0" max="1500" step="25" value="400">
+            <div class="slider-value-box">
+              <span>$</span>
+              <input type="number" class="expense-input" value="400">
+            </div>
+          </div>
+        </div>
+
+        <div class="slider-item">
+          <label>Transport / Fuel / Insurance</label>
+          <div class="slider-row">
+            <input type="range" class="expense-slider" min="0" max="1200" step="25" value="300">
+            <div class="slider-value-box">
+              <span>$</span>
+              <input type="number" class="expense-input" value="300">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 2: Wants -->
+      <div class="category-header" onclick="toggleSection('wantsContent', 'wantsArrow')">
+        <div class="category-title">
+          <span class="dot dot-wants"></span>
+          Discretionary Wants (30% Target)
+        </div>
+        <div class="category-stats">
+          <span class="category-percent" id="wantsPercent">0%</span>
+          <span class="category-total" id="wantsTotal">$0</span>
+          <i class="fa-solid fa-chevron-up arrow collapsed" id="wantsArrow"></i>
+        </div>
+      </div>
+
+      <div class="category-content hidden" id="wantsContent">
+        <div class="slider-item">
+          <label>Dining & Takeout</label>
+          <div class="slider-row">
+            <input type="range" class="expense-slider" min="0" max="1000" step="25" value="250">
+            <div class="slider-value-box">
+              <span>$</span>
+              <input type="number" class="expense-input" value="250">
+            </div>
+          </div>
+        </div>
+
+        <div class="slider-item">
+          <label>Entertainment & Subscriptions</label>
+          <div class="slider-row">
+            <input type="range" class="expense-slider" min="0" max="800" step="25" value="150">
+            <div class="slider-value-box">
+              <span>$</span>
+              <input type="number" class="expense-input" value="150">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category 3: Savings -->
+      <div class="category-header" onclick="toggleSection('savingsContent', 'savingsArrow')">
+        <div class="category-title">
+          <span class="dot dot-savings"></span>
+          Savings & Debt Payoff (20% Target)
+        </div>
+        <div class="category-stats">
+          <span class="category-percent" id="savingsPercent">0%</span>
+          <span class="category-total" id="savingsCategoryTotal">$0</span>
+          <i class="fa-solid fa-chevron-up arrow collapsed" id="savingsArrow"></i>
+        </div>
+      </div>
+
+      <div class="category-content hidden" id="savingsContent">
+        <div class="slider-item">
+          <label>Emergency Fund / Investment</label>
+          <div class="slider-row">
+            <input type="range" class="expense-slider" min="0" max="2000" step="50" value="500">
+            <div class="slider-value-box">
+              <span>$</span>
+              <input type="number" class="expense-input" value="500">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -138,61 +567,119 @@
   </footer>
 
   <script>
-    let income = parseFloat(localStorage.getItem('bf_income')) || 0;
-    let expenses = JSON.parse(localStorage.getItem('bf_expenses')) || [];
-
-    function init() {
-      document.getElementById('incomeInput').value = income || '';
-      render();
-    }
-
-    function updateIncome() {
-      income = parseFloat(document.getElementById('incomeInput').value) || 0;
-      localStorage.setItem('bf_income', income);
-      render();
-    }
-
-    function addExpense() {
-      const name = document.getElementById('expName').value.trim();
-      const amount = parseFloat(document.getElementById('expAmount').value) || 0;
-      if (name && amount > 0) {
-        expenses.push({ id: Date.now(), name, amount });
-        localStorage.setItem('bf_expenses', JSON.stringify(expenses));
-        document.getElementById('expName').value = '';
-        document.getElementById('expAmount').value = '';
-        render();
+    // Initialize Doughnut Chart
+    const ctx = document.getElementById('budgetChart').getContext('2d');
+    const budgetChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Needs', 'Wants', 'Savings'],
+        datasets: [{
+          data: [1800, 400, 500],
+          backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        cutout: '70%'
       }
+    });
+
+    function formatCurrency(val) {
+      const isNegative = val < 0;
+      const absVal = Math.abs(val).toLocaleString('en-US');
+      return isNegative ? `-$${absVal}` : `$${absVal}`;
     }
 
-    function deleteExpense(id) {
-      expenses = expenses.filter(e => e.id !== id);
-      localStorage.setItem('bf_expenses', JSON.stringify(expenses));
-      render();
+    function calculateCategoryTotal(containerId) {
+      const sliders = document.querySelectorAll(`#${containerId} .expense-slider`);
+      let total = 0;
+      sliders.forEach(slider => { total += parseFloat(slider.value) || 0; });
+      return total;
     }
 
-    function render() {
-      const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
-      const balance = income - totalExpenses;
-      const pct = income > 0 ? Math.min((totalExpenses / income) * 100, 100) : 0;
+    function calculatePlanner() {
+      const netIncome = parseFloat(document.getElementById('netIncome').value) || 0;
 
-      document.getElementById('incomeVal').textContent = '$' + income.toFixed(2);
-      document.getElementById('expenseVal').textContent = '$' + totalExpenses.toFixed(2);
-      document.getElementById('balanceVal').textContent = '$' + balance.toFixed(2);
-      document.getElementById('progressFill').style.width = pct + '%';
+      const needsTotal = calculateCategoryTotal('needsContent');
+      const wantsTotal = calculateCategoryTotal('wantsContent');
+      const savingsCatTotal = calculateCategoryTotal('savingsContent');
 
-      const listEl = document.getElementById('expenseList');
-      listEl.innerHTML = expenses.map(e => `
-        <li class="expense-item">
-          <span>${e.name}</span>
-          <div>
-            <strong style="margin-right: 12px;">$${e.amount.toFixed(2)}</strong>
-            <button class="del-btn" onclick="deleteExpense(${e.id})"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        </li>
-      `).join('');
+      const grandTotal = needsTotal + wantsTotal + savingsCatTotal;
+      const surplus = netIncome - grandTotal;
+      const rate = netIncome > 0 ? Math.round(((savingsCatTotal + Math.max(0, surplus)) / netIncome) * 100) : 0;
+
+      // Update KPI Cards
+      document.getElementById('totalExpenses').textContent = formatCurrency(grandTotal);
+      
+      const surplusEl = document.getElementById('savingsSurplus');
+      surplusEl.textContent = formatCurrency(surplus);
+      surplusEl.className = `kpi-value ${surplus < 0 ? 'negative' : 'positive'}`;
+
+      const statusEl = document.getElementById('budgetStatus');
+      if (surplus < 0) {
+        statusEl.className = 'status-badge negative';
+        statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Over Budget`;
+      } else {
+        statusEl.className = 'status-badge';
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Balanced`;
+      }
+
+      document.getElementById('savingsRate').textContent = `${rate}%`;
+
+      // Update Category Totals
+      document.getElementById('needsTotal').textContent = formatCurrency(needsTotal);
+      document.getElementById('wantsTotal').textContent = formatCurrency(wantsTotal);
+      document.getElementById('savingsCategoryTotal').textContent = formatCurrency(savingsCatTotal);
+
+      // Percentages for Progress Bar
+      const totalAllocated = grandTotal || 1;
+      const needsPct = Math.round((needsTotal / totalAllocated) * 100);
+      const wantsPct = Math.round((wantsTotal / totalAllocated) * 100);
+      const savingsPct = 100 - needsPct - wantsPct;
+
+      document.getElementById('needsPercent').textContent = `${needsPct}%`;
+      document.getElementById('wantsPercent').textContent = `${wantsPct}%`;
+      document.getElementById('savingsPercent').textContent = `${Math.max(0, savingsPct)}%`;
+
+      document.getElementById('barNeeds').style.width = `${needsPct}%`;
+      document.getElementById('barWants').style.width = `${wantsPct}%`;
+      document.getElementById('barSavings').style.width = `${Math.max(0, savingsPct)}%`;
+
+      // Update Chart Data
+      budgetChart.data.datasets[0].data = [needsTotal, wantsTotal, savingsCatTotal];
+      budgetChart.update();
     }
 
-    init();
+    // Synchronize Range Sliders & Numeric Inputs
+    document.querySelectorAll('.slider-item').forEach(item => {
+      const slider = item.querySelector('.expense-slider');
+      const box = item.querySelector('.expense-input');
+
+      slider.addEventListener('input', (e) => {
+        box.value = e.target.value;
+        calculatePlanner();
+      });
+
+      box.addEventListener('input', (e) => {
+        slider.value = e.target.value || 0;
+        calculatePlanner();
+      });
+    });
+
+    document.getElementById('netIncome').addEventListener('input', calculatePlanner);
+
+    function toggleSection(contentId, arrowId) {
+      const content = document.getElementById(contentId);
+      const arrow = document.getElementById(arrowId);
+
+      content.classList.toggle('hidden');
+      arrow.classList.toggle('collapsed');
+    }
+
+    calculatePlanner();
   </script>
 </body>
 </html>
