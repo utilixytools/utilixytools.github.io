@@ -1,149 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quebec Sales Tax Calculator - UtilixyTools</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quebec Tax Calculator - UtilixyTools</title>
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <style>
-    :root {
-      --bg-color: #061712;
-      --card-bg: rgba(14, 35, 27, 0.7);
-      --card-border: rgba(52, 211, 153, 0.15);
-      --accent-color: #10b981;
-      --accent-hover: #059669;
-      --text-main: #f0fdf4;
-      --text-muted: #86efac;
-      --text-sub: #9ca3af;
-      --input-bg: #0a2018;
+    .calculator-card {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
-
-    * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-    body {
-      background-color: var(--bg-color);
-      background-image: radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
-      color: var(--text-main);
-      min-height: 100vh;
+    .form-group {
+      margin-bottom: 20px;
     }
-
-    header {
-      display: flex; justify-content: space-between; align-items: center; padding: 20px 8%;
-      border-bottom: 1px solid var(--card-border); backdrop-filter: blur(12px); background: rgba(6, 23, 18, 0.8);
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
     }
-    .logo { font-size: 22px; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; }
-    .logo span { color: var(--accent-color); }
-
-    .container { max-width: 800px; margin: 50px auto; padding: 0 20px; }
-    .tool-card {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 32px; backdrop-filter: blur(10px);
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
     }
-
-    .mode-toggle { display: flex; gap: 10px; background: var(--input-bg); padding: 6px; border-radius: 12px; border: 1px solid var(--card-border); margin-bottom: 24px; }
-    .mode-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-sub); border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .mode-btn.active { background: var(--accent-color); color: #04120e; }
-
-    .input-group { margin-bottom: 20px; }
-    .input-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
-    .input-group input { width: 100%; padding: 14px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-main); font-size: 18px; outline: none; }
-    .input-group input:focus { border-color: var(--accent-color); }
-
-    .results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
-    .result-box { background: rgba(6, 23, 18, 0.5); padding: 18px; border-radius: 12px; border: 1px solid var(--card-border); }
-    .result-box label { font-size: 12px; color: var(--text-sub); display: block; }
-    .result-box .val { font-size: 22px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
-    .result-box.highlight { border-color: var(--accent-color); background: rgba(16, 185, 129, 0.08); }
-    .result-box.highlight .val { color: var(--accent-color); }
-
-    footer { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
+    .results-box {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .result-row.total {
+      font-weight: bold;
+      font-size: 18px;
+      border-top: 2px solid #ddd;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
+    <a href="index.html">
+      <i class="fa-solid fa-wrench"></i> Utilixy<span>Tools</span>
     </a>
+    <nav>
+      <a href="index.html">Tools</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
-  <main class="container">
-    <div style="margin-bottom: 24px;">
-      <a href="index.html" style="color: var(--accent-color); text-decoration: none; font-size: 14px; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Back to Tools</a>
-      <h1 style="font-size: 32px; font-weight: 800; margin-top: 12px;">Quebec Tax Calculator</h1>
-      <p style="color: var(--text-sub);">Instantly calculate 5% GST and 9.975% QST taxes for Quebec.</p>
-    </div>
+  <main>
+    <section class="calculator-card">
+      <h1><i class="fa-solid fa-calculator"></i> Quebec Tax Calculator</h1>
+      <p>Calculate GST (5%) and QST (9.975%) or extract tax amounts from total prices instantly.</p>
 
-    <div class="tool-card">
-      <div class="mode-toggle">
-        <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">Add Tax to Subtotal</button>
-        <button class="mode-btn" id="modeRemove" onclick="setMode('remove')">Extract Tax from Total</button>
+      <div class="form-group">
+        <label for="calc-mode">Calculation Mode</label>
+        <select id="calc-mode" onchange="calculateTax()">
+          <option value="add">Add Tax to Subtotal</option>
+          <option value="extract">Extract Tax from Total</option>
+        </select>
       </div>
 
-      <div class="input-group">
-        <label id="inputLabel">Subtotal Amount ($)</label>
-        <input type="number" id="amountInput" placeholder="0.00" step="0.01" oninput="calculateTax()">
+      <div class="form-group">
+        <label for="amount" id="amount-label">Subtotal Amount ($)</label>
+        <input type="number" id="amount" placeholder="0.00" step="0.01" oninput="calculateTax()">
       </div>
 
-      <div class="results-grid">
-        <div class="result-box">
-          <label>GST / TPS (5.000%)</label>
-          <div class="val" id="gstVal">$0.00</div>
+      <div class="results-box">
+        <div class="result-row">
+          <span>Subtotal (Net):</span>
+          <span id="res-subtotal">$0.00</span>
         </div>
-        <div class="result-box">
-          <label>QST / TVQ (9.975%)</label>
-          <div class="val" id="qstVal">$0.00</div>
+        <div class="result-row">
+          <span>GST / TPS (5%):</span>
+          <span id="res-gst">$0.00</span>
         </div>
-        <div class="result-box">
-          <label>Combined Tax (14.975%)</label>
-          <div class="val" id="totalTaxVal">$0.00</div>
+        <div class="result-row">
+          <span>QST / TVQ (9.975%):</span>
+          <span id="res-qst">$0.00</span>
         </div>
-        <div class="result-box highlight">
-          <label id="totalLabel">Grand Total</label>
-          <div class="val" id="grandTotalVal">$0.00</div>
+        <div class="result-row total">
+          <span>Total Amount:</span>
+          <span id="res-total">$0.00</span>
         </div>
       </div>
-    </div>
+    </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 UtilixyTools. All rights reserved.</p>
+    <p>© 2026 UtilixyTools. All rights reserved.</p>
   </footer>
 
   <script>
-    let mode = 'add';
-
-    function setMode(newMode) {
-      mode = newMode;
-      document.getElementById('modeAdd').classList.toggle('active', mode === 'add');
-      document.getElementById('modeRemove').classList.toggle('active', mode === 'remove');
-      document.getElementById('inputLabel').textContent = mode === 'add' ? 'Subtotal Amount ($)' : 'Total Price (Taxes Included) ($)';
-      document.getElementById('totalLabel').textContent = mode === 'add' ? 'Grand Total' : 'Net Subtotal (Before Tax)';
-      calculateTax();
-    }
-
     function calculateTax() {
-      const input = parseFloat(document.getElementById('amountInput').value) || 0;
-      let gst = 0, qst = 0, totalTax = 0, finalVal = 0;
+      const mode = document.getElementById('calc-mode').value;
+      const amount = parseFloat(document.getElementById('amount').value) || 0;
+      const amountLabel = document.getElementById('amount-label');
+
+      const GST_RATE = 0.05;
+      const QST_RATE = 0.09975;
+      const TOTAL_TAX_RATE = GST_RATE + QST_RATE; // 0.14975
+
+      let subtotal = 0;
+      let gst = 0;
+      let qst = 0;
+      let total = 0;
 
       if (mode === 'add') {
-        gst = input * 0.05;
-        qst = input * 0.09975;
-        totalTax = gst + qst;
-        finalVal = input + totalTax;
+        amountLabel.innerText = "Subtotal Amount ($)";
+        subtotal = amount;
+        gst = subtotal * GST_RATE;
+        qst = subtotal * QST_RATE;
+        total = subtotal + gst + qst;
       } else {
-        const subtotal = input / 1.14975;
-        gst = subtotal * 0.05;
-        qst = subtotal * 0.09975;
-        totalTax = gst + qst;
-        finalVal = subtotal;
+        amountLabel.innerText = "Total Amount ($)";
+        total = amount;
+        subtotal = total / (1 + TOTAL_TAX_RATE);
+        gst = subtotal * GST_RATE;
+        qst = subtotal * QST_RATE;
       }
 
-      document.getElementById('gstVal').textContent = '$' + gst.toFixed(2);
-      document.getElementById('qstVal').textContent = '$' + qst.toFixed(2);
-      document.getElementById('totalTaxVal').textContent = '$' + totalTax.toFixed(2);
-      document.getElementById('grandTotalVal').textContent = '$' + finalVal.toFixed(2);
+      document.getElementById('res-subtotal').innerText = '$' + subtotal.toFixed(2);
+      document.getElementById('res-gst').innerText = '$' + gst.toFixed(2);
+      document.getElementById('res-qst').innerText = '$' + qst.toFixed(2);
+      document.getElementById('res-total').innerText = '$' + total.toFixed(2);
     }
   </script>
 </body>
