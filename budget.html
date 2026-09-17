@@ -1,203 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BudgetFlow - UtilixyTools</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<title>BudgetFlow – Free Income and Expense Tracker</title>
-<meta name="description" content="Track your income and expenses with BudgetFlow. A free online budget tracker to calculate monthly income, expenses, and money left.">
+  <style>
+    :root {
+      --bg-color: #061712;
+      --card-bg: rgba(14, 35, 27, 0.7);
+      --card-border: rgba(52, 211, 153, 0.15);
+      --accent-color: #10b981;
+      --accent-hover: #059669;
+      --text-main: #f0fdf4;
+      --text-muted: #86efac;
+      --text-sub: #9ca3af;
+      --input-bg: #0a2018;
+    }
 
-<link rel="icon" href="logo.png">
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-color);
+      background-image: radial-gradient(at 10% 10%, rgba(16, 185, 129, 0.12) 0px, transparent 50%), radial-gradient(at 90% 90%, rgba(5, 150, 105, 0.12) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
 
-<style>
-* { box-sizing: border-box; }
+    header {
+      display: flex; justify-content: space-between; align-items: center; padding: 20px 8%;
+      border-bottom: 1px solid var(--card-border); backdrop-filter: blur(12px); background: rgba(6, 23, 18, 0.8);
+    }
+    .logo { font-size: 22px; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    .logo span { color: var(--accent-color); }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #022c22, #064e3b);
-  color: white;
-  padding: 20px;
-  min-height: 100vh;
-}
+    .container { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
-.container {
-  max-width: 520px;
-  margin: auto;
-}
+    .tool-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 28px; backdrop-filter: blur(10px);
+    }
 
-.back {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  display: block;
-  margin-bottom: 15px;
-}
+    .stat-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-box { background: rgba(6, 23, 18, 0.5); padding: 18px; border-radius: 12px; border: 1px solid var(--card-border); }
+    .stat-box label { font-size: 12px; color: var(--text-sub); display: block; }
+    .stat-box .val { font-size: 20px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
 
-h1 {
-  text-align: center;
-  margin-bottom: 10px;
-}
+    .input-group { margin-bottom: 16px; }
+    .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
+    .input-group input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-main); outline: none; }
 
-.intro {
-  text-align: center;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  color: #e5e7eb;
-}
+    .btn { background: var(--accent-color); color: #04120e; padding: 12px; width: 100%; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .btn:hover { background: var(--accent-hover); }
 
-.card, .seo-box {
-  background: #f9fafb;
-  color: black;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  margin-bottom: 20px;
-}
+    .progress-bar-bg { background: var(--input-bg); height: 12px; border-radius: 6px; overflow: hidden; margin-top: 10px; border: 1px solid var(--card-border); }
+    .progress-bar-fill { background: var(--accent-color); height: 100%; width: 0%; transition: width 0.3s; }
 
-.section-title {
-  font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+    .expense-list { list-style: none; margin-top: 16px; }
+    .expense-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(6, 23, 18, 0.4); border: 1px solid var(--card-border); border-radius: 10px; margin-bottom: 8px; }
+    .del-btn { color: #ef4444; cursor: pointer; background: none; border: none; font-size: 14px; }
 
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 8px;
-  border: none;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.calc-btn {
-  background: #064e3b;
-  color: white;
-}
-
-.clear-btn {
-  background: #e5e7eb;
-  color: black;
-}
-
-.result {
-  margin-top: 15px;
-  padding: 15px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  font-weight: bold;
-  text-align: center;
-}
-
-.seo-box h2 {
-  margin-top: 0;
-}
-
-.seo-box p, .seo-box li {
-  line-height: 1.6;
-}
-</style>
+    footer { text-align: center; padding: 40px; color: var(--text-sub); font-size: 14px; }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+  <header>
+    <a href="index.html" class="logo">
+      <i class="fa-solid fa-screwdriver-wrench"></i> Utilixy<span>Tools</span>
+    </a>
+  </header>
 
-<a href="index.html" class="back">← Back</a>
+  <main class="container">
+    <div style="margin-bottom: 24px;">
+      <a href="index.html" style="color: var(--accent-color); text-decoration: none; font-size: 14px; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Back to Tools</a>
+      <h1 style="font-size: 32px; font-weight: 800; margin-top: 12px;">BudgetFlow</h1>
+      <p style="color: var(--text-sub);">Manage your monthly budget and expenses seamlessly.</p>
+    </div>
 
-<h1>BudgetFlow: Free Income and Expense Tracker</h1>
+    <div class="stat-cards">
+      <div class="stat-box">
+        <label>Total Income</label>
+        <div class="val" id="incomeVal">$0.00</div>
+      </div>
+      <div class="stat-box">
+        <label>Total Expenses</label>
+        <div class="val" id="expenseVal">$0.00</div>
+      </div>
+      <div class="stat-box">
+        <label>Remaining Balance</label>
+        <div class="val" id="balanceVal" style="color: var(--accent-color);">$0.00</div>
+      </div>
+    </div>
 
-<p class="intro">
-  Track your income, expenses, and monthly budget in one simple tool.
-</p>
+    <div class="grid">
+      <!-- Controls Panel -->
+      <div class="tool-card">
+        <h3 style="margin-bottom: 16px;">Set Budget</h3>
+        <div class="input-group">
+          <label>Monthly Income ($)</label>
+          <input type="number" id="incomeInput" placeholder="5000">
+        </div>
+        <button class="btn" onclick="updateIncome()" style="margin-bottom: 24px;">Update Income</button>
 
-<div class="card">
+        <h3 style="margin-bottom: 16px;">Add Expense</h3>
+        <div class="input-group">
+          <label>Expense Name</label>
+          <input type="text" id="expName" placeholder="Groceries">
+        </div>
+        <div class="input-group">
+          <label>Amount ($)</label>
+          <input type="number" id="expAmount" placeholder="150">
+        </div>
+        <button class="btn" onclick="addExpense()">Add Expense</button>
+      </div>
 
-<div class="section-title">Income</div>
+      <!-- Overview Panel -->
+      <div class="tool-card">
+        <h3>Budget Usage</h3>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
 
-<input id="job1" type="number" placeholder="Job income">
-<input id="job2" type="number" placeholder="Other income">
-<input id="extra" type="number" placeholder="Extra income">
+        <h3 style="margin-top: 28px; margin-bottom: 12px;">Expense History</h3>
+        <ul class="expense-list" id="expenseList">
+          <!-- Expenses render dynamically -->
+        </ul>
+      </div>
+    </div>
+  </main>
 
-<div class="section-title">Expenses</div>
+  <footer>
+    <p>&copy; 2026 UtilixyTools. All rights reserved.</p>
+  </footer>
 
-<input id="phone" type="number" placeholder="Phone">
-<input id="metro" type="number" placeholder="Metro">
-<input id="hydro" type="number" placeholder="Hydro">
-<input id="food" type="number" placeholder="Food">
-<input id="resto" type="number" placeholder="Restaurants">
+  <script>
+    let income = parseFloat(localStorage.getItem('bf_income')) || 0;
+    let expenses = JSON.parse(localStorage.getItem('bf_expenses')) || [];
 
-<button class="calc-btn" onclick="calc()">Calculate</button>
-<button class="clear-btn" onclick="clearData()">Clear</button>
+    function init() {
+      document.getElementById('incomeInput').value = income || '';
+      render();
+    }
 
-<div class="result" id="result">
-Money left: $0
-</div>
+    function updateIncome() {
+      income = parseFloat(document.getElementById('incomeInput').value) || 0;
+      localStorage.setItem('bf_income', income);
+      render();
+    }
 
-</div>
+    function addExpense() {
+      const name = document.getElementById('expName').value.trim();
+      const amount = parseFloat(document.getElementById('expAmount').value) || 0;
+      if (name && amount > 0) {
+        expenses.push({ id: Date.now(), name, amount });
+        localStorage.setItem('bf_expenses', JSON.stringify(expenses));
+        document.getElementById('expName').value = '';
+        document.getElementById('expAmount').value = '';
+        render();
+      }
+    }
 
-<div class="seo-box">
-  <h2>What is BudgetFlow?</h2>
-  <p>
-    BudgetFlow is a free online income and expense tracker. It helps you calculate your total income, subtract your monthly expenses, and see how much money you have left.
-  </p>
+    function deleteExpense(id) {
+      expenses = expenses.filter(e => e.id !== id);
+      localStorage.setItem('bf_expenses', JSON.stringify(expenses));
+      render();
+    }
 
-  <h2>Who can use this budget tracker?</h2>
-  <p>
-    This tool is useful for students, workers, freelancers, and anyone who wants to manage their monthly budget more easily.
-  </p>
+    function render() {
+      const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+      const balance = income - totalExpenses;
+      const pct = income > 0 ? Math.min((totalExpenses / income) * 100, 100) : 0;
 
-  <h2>How to use BudgetFlow</h2>
-  <ul>
-    <li>Enter your income sources.</li>
-    <li>Enter your monthly expenses.</li>
-    <li>Click calculate to see your money left.</li>
-  </ul>
-</div>
+      document.getElementById('incomeVal').textContent = '$' + income.toFixed(2);
+      document.getElementById('expenseVal').textContent = '$' + totalExpenses.toFixed(2);
+      document.getElementById('balanceVal').textContent = '$' + balance.toFixed(2);
+      document.getElementById('progressFill').style.width = pct + '%';
 
-</div>
+      const listEl = document.getElementById('expenseList');
+      listEl.innerHTML = expenses.map(e => `
+        <li class="expense-item">
+          <span>${e.name}</span>
+          <div>
+            <strong style="margin-right: 12px;">$${e.amount.toFixed(2)}</strong>
+            <button class="del-btn" onclick="deleteExpense(${e.id})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </li>
+      `).join('');
+    }
 
-<script>
-function calc(){
-  let income = 
-    Number(job1.value || 0) + 
-    Number(job2.value || 0) + 
-    Number(extra.value || 0);
-
-  let expenses = 
-    Number(phone.value || 0) + 
-    Number(metro.value || 0) + 
-    Number(hydro.value || 0) + 
-    Number(food.value || 0) + 
-    Number(resto.value || 0);
-
-  let total = income - expenses;
-
-  result.innerText = "Money left: $" + total.toFixed(2);
-}
-
-function clearData(){
-  job1.value="";
-  job2.value="";
-  extra.value="";
-  phone.value="";
-  metro.value="";
-  hydro.value="";
-  food.value="";
-  resto.value="";
-  result.innerText="Money left: $0";
-}
-</script>
-
+    init();
+  </script>
 </body>
 </html>
